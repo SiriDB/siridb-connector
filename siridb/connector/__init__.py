@@ -1,10 +1,8 @@
 import os
 import sys
-from .client import (
-    SiriClient,
-    SiriClientProtocol,
-    AsyncSiriClient,
-    AsyncSiriCluster)
+from .lib.protocol import _SiriDBClientProtocol
+from .lib.connection import SiriDBConnection
+
 
 class SiriDBClientProtocol(_SiriClientProtocol):
 
@@ -27,19 +25,44 @@ def connect(username,
             timeout=10,
             protocol=SiriClientProtocol):
 
-    connection = SiriDBConnection(loop)
-
-
-    client = self._loop.create_connection(
-        lambda: protocol(username, password, dbname),
+    return SiriDBConnection(
+        username,
+        password,
+        dbname,
         host=host,
-        port=port)
+        port=port,
+        loop=loop,
+        timeout=timeout,
+        protocol=protocol)
 
-    self._transport, self._protocol = self._loop.run_until_complete(
-        asyncio.wait_for(client, timeout=timeout))
-    self._loop.run_until_complete(self._protocol.auth_future)
 
-__all__ = ['SiriClient',
-           'SiriClientProtocol',
-           'AsyncSiriClient',
-           'AsyncSiriCluster']
+async def async_connect(username,
+                        password,
+                        dbname,
+                        host='127.0.0.1',
+                        port=c.DEFAULT_CLIENT_PORT,
+                        loop=None,
+                        timeout=10,
+                        keepalive=False,
+                        protocol=SiriClientProtocol):
+
+    connection = SiriDBAsyncConnection()
+    await connection.connect(
+        username,
+        password,
+        dbname,
+        host=host,
+        port=port,
+        loop=loop,
+        timeout=timeout,
+        keepalive=keepalive,
+        protocol=protocol)
+
+    return connection
+
+
+
+__all__ = [
+    'connect',
+    'async_connect',
+    'SiriDBClientProtocol']

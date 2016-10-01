@@ -44,7 +44,7 @@ def _pack(tipe, data=None):
     return _MAP[protomap.MAP_REQ_DTYPE[tipe]](data)
 
 
-class SiriDBClientProtocol(asyncio.Protocol):
+class _SiriDBClientProtocol(asyncio.Protocol):
 
     _connected = False
 
