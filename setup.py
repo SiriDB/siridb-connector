@@ -2,7 +2,7 @@
 #  Got documentation from: http://peterdowns.com/posts/first-time-with-pypi.html
 #
 #   1. Create tag:
-#       git tag 1.0.6 -m "Adds a tag so that we can put this new version on PyPI."
+#       git tag 2.0.0 -m "Adds a tag so that we can put this new version on PyPI."
 #
 #   2. Push tag:
 #       git push --tags origin master
@@ -41,8 +41,5 @@ setup(
         'Topic :: Database',
         'Topic :: Software Development'
     ],
+    install_requires=['qpack']
 )
-
-
-Topic :: Database
-Topic :: Software Development

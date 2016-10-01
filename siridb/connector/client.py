@@ -22,72 +22,8 @@ from .protocol import SiriClientProtocol as _SiriClientProtocol
 from .protocol import PackageClientProtocol
 
 
-class SiriClientProtocol(_SiriClientProtocol):
-
-    def on_connection_made(self):
-        pass
-
-    def on_authenticated(self):
-        pass
-
-    def on_connection_lost(self):
-        pass
 
 
-class SiriClient():
-
-    def connect(self,
-                username,
-                password,
-                dbname,
-                host='127.0.0.1',
-                port=c.DEFAULT_CLIENT_PORT,
-                loop=None,
-                timeout=10,
-                protocol=SiriClientProtocol):
-        self._loop = loop or asyncio.get_event_loop()
-        client = self._loop.create_connection(
-            lambda: protocol(username, password, dbname),
-            host=host,
-            port=port)
-        self._transport, self._protocol = self._loop.run_until_complete(
-            asyncio.wait_for(client, timeout=timeout))
-        self._loop.run_until_complete(self._protocol.auth_future)
-
-    def close(self):
-        if hasattr(self, '_protocol') and hasattr(self._protocol, 'transport'):
-            self._protocol.transport.close()
-
-    def query(self, query, time_precision=None, timeout=30):
-        result = self._loop.run_until_complete(
-            self._protocol.send_package(npt.CPROTO_REQ_QUERY,
-                                        data=(query, time_precision),
-                                        timeout=timeout))
-        return result
-
-    def insert(self, data, timeout=600):
-        result = self._loop.run_until_complete(
-            self._protocol.send_package(npt.CPROTO_REQ_INSERT,
-                                        data=data,
-                                        timeout=timeout))
-        return result
-
-    def _register_server(self, server, timeout=30):
-        result = self._loop.run_until_complete(
-            self._protocol.send_package(npt.CPROTO_REQ_REGISTER_SERVER,
-                                        data=server,
-                                        timeout=timeout))
-        return result
-
-    def _get_file(self, fn, timeout=30):
-        msg = npt.FILE_MAP.get(fn, None)
-        if msg is None:
-            raise FileNotFoundError('Cannot get file {!r}. Available file '
-                                    'requests are: {}'
-                                    .format(fn, ', '.join(npt.FILE_MAP.keys())))
-        result = self._loop.run_until_complete(
-            self._protocol.send_package(msg, timeout=timeout))
-        return result
 
 
 class AsyncSiriClient():
