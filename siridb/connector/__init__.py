@@ -1,10 +1,10 @@
 import os
 import sys
-from .lib.protocol import _SiriDBClientProtocol
+from .lib.protocol import _SiriDBProtocol
 from .lib.connection import SiriDBConnection
 
 
-class SiriDBClientProtocol(_SiriClientProtocol):
+class SiriDBProtocol(_SiriDBProtocol):
 
     def on_connection_made(self):
         pass
@@ -65,4 +65,4 @@ async def async_connect(username,
 __all__ = [
     'connect',
     'async_connect',
-    'SiriDBClientProtocol']
+    'SiriDBProtocol']

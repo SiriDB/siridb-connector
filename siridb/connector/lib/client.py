@@ -2,180 +2,12 @@
 
 SiriDB Client for python => 3.5 using asyncio.
 
-Note: for a python 2.7 SiriDB client we have another client running on Twisted.
-
 :copyright: 2016, Jeroen van der Heijden (Transceptor Technology)
 '''
-import asyncio
-import random
-import logging
-import functools
-import time
-from .shared.packageprotocol import networkpackets as npt
-from .shared import constants as c
-from .shared.exceptions import ServerError
-from .shared.exceptions import PoolError
-from .shared.exceptions import AuthenticationError
-from .shared.exceptions import UserAuthError
-from .shared.exceptions import NetworkAuthError
-from .protocol import SiriClientProtocol as _SiriClientProtocol
-from .protocol import PackageClientProtocol
+from .protocol import _SiriDBProtocol
 
 
-
-
-
-
-class AsyncSiriClient():
-
-    _protocol = None
-    _keepalive = None
-
-    async def keepalive_loop(self, interval=45):
-        sleep = interval
-        while True:
-            await asyncio.sleep(sleep)
-            if not self.connected:
-                break
-            sleep = \
-                max(0, interval - time.time() + self._last_resp) or interval
-            if sleep == interval:
-                logging.debug('Send keep-alive package...')
-                try:
-                    await self._protocol.send_package(npt.CPROTO_REQ_PING,
-                                                      timeout=15)
-                except asyncio.CancelledError:
-                    break
-                except Exception as e:
-                    logging.error(e)
-                    self.close()
-                    break
-
-    async def connect(self,
-                      username,
-                      password,
-                      dbname,
-                      host='127.0.0.1',
-                      port=c.DEFAULT_CLIENT_PORT,
-                      loop=None,
-                      timeout=10,
-                      keepalive=False,
-                      protocol=SiriClientProtocol):
-        loop = loop or asyncio.get_event_loop()
-        client = loop.create_connection(
-            lambda: protocol(username, password, dbname),
-            host=host,
-            port=port)
-        self._timeout = timeout
-        _transport, self._protocol = \
-            await asyncio.wait_for(client, timeout=timeout)
-        await self._protocol.auth_future
-        self._last_resp = time.time()
-        if keepalive and (self._keepalive is None or self._keepalive.done()):
-            self._keepalive = asyncio.ensure_future(self.keepalive_loop())
-
-    def close(self):
-        if self._keepalive is not None:
-            self._keepalive.cancel()
-            del self._keepalive
-        if self._protocol is not None:
-            self._protocol.transport.close()
-            del self._protocol
-
-    async def query(self, query, time_precision=None, timeout=3600):
-        result = await self._protocol.send_package(
-            npt.CPROTO_REQ_QUERY,
-            data=(query, time_precision),
-            timeout=timeout)
-        self._last_resp = time.time()
-        return result
-
-    async def insert(self, data, timeout=3600):
-        result = await self._protocol.send_package(
-            npt.CPROTO_REQ_INSERT,
-            data=data,
-            timeout=timeout)
-        self._last_resp = time.time()
-        return result
-
-    @property
-    def connected(self):
-        return self._protocol is not None and self._protocol._connected
-
-
-class _SiriClientInfoProtocol(_SiriClientProtocol):
-
-    _info = []
-
-    def connection_made(self, transport):
-        def finished(future):
-            if not future.exception():
-                self.on_info(future.result())
-
-        self._connected = True
-        PackageClientProtocol.connection_made(self, transport)
-        self.auth_future = self.send_package(npt.CPROTO_REQ_INFO,
-                                             data=None,
-                                             timeout=10)
-        self.auth_future.add_done_callback(finished)
-        self._password = None
-        self.on_connection_made()
-
-    def on_info(self, data):
-        self._info = data
-
-
-async def get_siridb_info(host='127.0.0.1',
-                          port=c.DEFAULT_CLIENT_PORT,
-                          loop=None,
-                          timeout=10,
-                          protocol=_SiriClientInfoProtocol):
-    loop = loop or asyncio.get_event_loop()
-    client = loop.create_connection(
-        lambda: protocol(None, None, None),
-        host=host,
-        port=port)
-    transport, protocol = \
-        await asyncio.wait_for(client, timeout=timeout)
-    await protocol.auth_future
-    transport.close()
-    return protocol._info
-
-
-class _SiriClientLoadDBProtocol(_SiriClientProtocol):
-
-    def connection_made(self, transport):
-        def finished(future):
-            pass
-
-        self._connected = True
-        PackageClientProtocol.connection_made(self, transport)
-        self.auth_future = self.send_package(npt.CPROTO_REQ_LOADDB,
-                                             data=self._dbname,
-                                             timeout=10)
-        self.auth_future.add_done_callback(finished)
-        self._password = None
-        self.on_connection_made()
-
-
-async def load_database(dbpath,
-                        host='127.0.0.1',
-                        port=c.DEFAULT_CLIENT_PORT,
-                        loop=None,
-                        timeout=10,
-                        protocol=_SiriClientLoadDBProtocol):
-    loop = loop or asyncio.get_event_loop()
-    client = loop.create_connection(
-        lambda: protocol(None, None, dbpath),
-        host=host,
-        port=port)
-    transport, protocol = \
-        await asyncio.wait_for(client, timeout=timeout)
-    await protocol.auth_future
-    transport.close()
-
-
-class SiriClusterProtocol(_SiriClientProtocol):
+class SiriDBClientProtocol(_SiriDBProtocol):
 
     _is_available = False
 
@@ -212,7 +44,7 @@ DEFAULT_CONNECT_TIMEOUT = 10
 DEFAULT_INACTIVE_TIME = 30
 
 
-class AsyncSiriCluster:
+class SiriDBClient:
     '''
         Exception handling:
 

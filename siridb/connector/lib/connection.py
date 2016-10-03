@@ -1,6 +1,4 @@
 
-
-
 class SiriDBConnection():
 
     def __init__(self,

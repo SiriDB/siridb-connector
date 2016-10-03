@@ -21,30 +21,14 @@ _MAP = (
     lambda data: data
 )
 
-#
-# 2 MB is the maximum package size which is allowed by SiriDB
-# but even lower size packages are recommended. (< 1 MB)
-#
-_MAX_PACKAGE_SZ = 2000000
 
-
-def _qpack_safe(data):
-    packed = qpack.packb(data)
-    size = len(packed)
-    if size > _MAX_PACKAGE_SZ:
-        raise ValueError(
-            'Package size too large (got {} bytes, max allowed: {} bytes)'
-            .format(size, _MAX_PACKAGE_SZ))
-    return packed
-
-
-def _pack(tipe, data=None):
+def _packdata(tipe, data=None):
     assert tipe in protomap.MAP_REQ_DTYPE, \
         'No data type found for message type: {}'.format(tipe)
     return _MAP[protomap.MAP_REQ_DTYPE[tipe]](data)
 
 
-class _SiriDBClientProtocol(asyncio.Protocol):
+class _SiriDBProtocol(asyncio.Protocol):
 
     _connected = False
 
@@ -173,7 +157,7 @@ class _SiriDBClientProtocol(asyncio.Protocol):
         self._pid %= 65536  # pid is handled as uint16_t
 
         if not is_binary:
-            data = _pack(tipe, data)
+            data = _packdata(tipe, data)
 
         header = DataPackage.struct_datapackage.pack(
             len(data),
