@@ -1,10 +1,14 @@
 from distutils.core import setup
+import setuptools
 
-VERSION = '2.0.0'
+VERSION = '2.0.1'
 
 setup(
     name='siridb-connector',
-    packages=['siridb-connector'],
+    packages=[
+        'siridb',
+        'siridb.connector',
+        'siridb.connector.lib'],
     version=VERSION,
     description='SiriDB Connector',
     author='Jeroen van der Heijden',

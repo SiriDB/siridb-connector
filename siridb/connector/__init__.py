@@ -8,6 +8,19 @@ from .lib.defaults import DEFAULT_CLIENT_PORT
 from .lib.client import SiriDBClient
 
 
+__version_info__ = (2, 0, 1)
+__version__ = '.'.join(map(str, __version_info__))
+__maintainer__ = 'Jeroen van der Heijden'
+__email__ = 'jeroen@transceptor.technology'
+__all__ = [
+    'async_connect',
+    'async_server_info',
+    'connect',
+    'SiriDBClient',
+    'SiriDBProtocol',
+]
+
+
 class SiriDBProtocol(_SiriDBProtocol):
 
     def on_connection_made(self):
@@ -81,10 +94,3 @@ async def async_server_info(host='127.0.0.1',
     return protocol._info
 
 
-__all__ = [
-    'async_connect',
-    'async_server_info',
-    'connect',
-    'SiriDBClient',
-    'SiriDBProtocol',
-]
