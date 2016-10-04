@@ -1,5 +1,6 @@
 import asyncio
 import time
+import logging
 from .defaults import DEFAULT_CLIENT_PORT
 from .protocol import _SiriDBProtocol
 from .protomap import CPROTO_REQ_QUERY
