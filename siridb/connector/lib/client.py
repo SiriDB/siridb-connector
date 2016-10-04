@@ -4,10 +4,18 @@ SiriDB Client for python => 3.5 using asyncio.
 
 :copyright: 2016, Jeroen van der Heijden (Transceptor Technology)
 '''
+import asyncio
+import functools
+import logging
+import random
 from .protocol import _SiriDBProtocol
+from .connection import SiriDBAsyncConnection
+from .exceptions import AuthenticationError
+from .exceptions import ServerError
+from .exceptions import PoolError
 
 
-class SiriDBClientProtocol(_SiriDBProtocol):
+class _SiriDBClientProtocol(_SiriDBProtocol):
 
     _is_available = False
 
@@ -19,7 +27,7 @@ class SiriDBClientProtocol(_SiriDBProtocol):
     def on_authenticated(self):
         self._is_available = True
 
-    def on_connection_lost(self):
+    def on_connection_lost(self, exc):
         self._is_available = False
         self._trigger_connect()
 
@@ -71,6 +79,8 @@ class SiriDBClient:
         - OverflowError (can only be raised when using the insert() method)
             Raise when integer values cannot not be packed due to an overflow
             error. (integer values should be signed and not more than 63 bits)
+        - UserAuthError
+            The user as no rights to perform the insert or query.
     '''
 
     def __init__(self,
@@ -130,7 +140,7 @@ class SiriDBClient:
         self._keepalive = keepalive
         for host, port, *config in hostlist:
             config = config.pop() if config else {}
-            client = AsyncSiriClient()
+            client = SiriDBAsyncConnection()
             client.host = host
             client.port = port
             client.is_backup = config.get('backup', False)
@@ -145,7 +155,7 @@ class SiriDBClient:
         self._connect_task = None
         self._max_wait_retry = max_wait_retry
         self._protocol = \
-            functools.partial(SiriClusterProtocol,
+            functools.partial(_SiriDBClientProtocol,
                               trigger_connect=self._trigger_connect,
                               inactive_time=inactive_time)
 

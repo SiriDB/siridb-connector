@@ -17,10 +17,9 @@ from .exceptions import UserAuthError
 
 _MAP = (
     lambda data: b'',
-    lambda data: _qpack_safe(data),
+    lambda data: qpack.packb(data),
     lambda data: data
 )
-
 
 def _packdata(tipe, data=None):
     assert tipe in protomap.MAP_REQ_DTYPE, \
@@ -230,3 +229,29 @@ class _SiriDBProtocol(asyncio.Protocol):
                     future,
                     self._data_package.data)
 
+
+class _SiriDBInfoProtocol(_SiriDBProtocol):
+
+    _info = []
+
+    def connection_made(self, transport):
+        '''
+        override _SiriDBProtocol
+        '''
+        def finished(future):
+            if not future.exception():
+                self._info = future.result()
+
+        self.transport = transport
+        self.remote_ip, self.port = transport.get_extra_info('peername')[:2]
+
+        logging.info(
+            'Connection made (address: {} port: {})'
+            .format(self.remote_ip, self.port))
+
+        self.future = self.send_package(
+                protomap.CPROTO_REQ_INFO,
+                data=None,
+                timeout=10)
+
+        self.future.add_done_callback(finished)

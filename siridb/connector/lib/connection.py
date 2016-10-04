@@ -1,3 +1,12 @@
+import asyncio
+import time
+from .defaults import DEFAULT_CLIENT_PORT
+from .protocol import _SiriDBProtocol
+from .protomap import CPROTO_REQ_QUERY
+from .protomap import CPROTO_REQ_INSERT
+from .protomap import CPROTO_REQ_REGISTER_SERVER
+from .protomap import CPROTO_REQ_PING
+from .protomap import FILE_MAP
 
 class SiriDBConnection():
 
@@ -6,10 +15,10 @@ class SiriDBConnection():
                 password,
                 dbname,
                 host='127.0.0.1',
-                port=c.DEFAULT_CLIENT_PORT,
+                port=DEFAULT_CLIENT_PORT,
                 loop=None,
                 timeout=10,
-                protocol=SiriClientProtocol):
+                protocol=_SiriDBProtocol):
         self._loop = loop or asyncio.get_event_loop()
         client = self._loop.create_connection(
             lambda: protocol(username, password, dbname),
@@ -25,14 +34,14 @@ class SiriDBConnection():
 
     def query(self, query, time_precision=None, timeout=30):
         result = self._loop.run_until_complete(
-            self._protocol.send_package(npt.CPROTO_REQ_QUERY,
+            self._protocol.send_package(CPROTO_REQ_QUERY,
                                         data=(query, time_precision),
                                         timeout=timeout))
         return result
 
     def insert(self, data, timeout=600):
         result = self._loop.run_until_complete(
-            self._protocol.send_package(npt.CPROTO_REQ_INSERT,
+            self._protocol.send_package(CPROTO_REQ_INSERT,
                                         data=data,
                                         timeout=timeout))
         return result
@@ -44,7 +53,7 @@ class SiriDBConnection():
         otherwise. Full access rights are required for this request.
         '''
         result = self._loop.run_until_complete(
-            self._protocol.send_package(npt.CPROTO_REQ_REGISTER_SERVER,
+            self._protocol.send_package(CPROTO_REQ_REGISTER_SERVER,
                                         data=server,
                                         timeout=timeout))
         return result
@@ -55,11 +64,11 @@ class SiriDBConnection():
         This method is used by the SiriDB manage tool and should not be used
         otherwise. Full access rights are required for this request.
         '''
-        msg = npt.FILE_MAP.get(fn, None)
+        msg = FILE_MAP.get(fn, None)
         if msg is None:
             raise FileNotFoundError('Cannot get file {!r}. Available file '
                                     'requests are: {}'
-                                    .format(fn, ', '.join(npt.FILE_MAP.keys())))
+                                    .format(fn, ', '.join(FILE_MAP.keys())))
         result = self._loop.run_until_complete(
             self._protocol.send_package(msg, timeout=timeout))
         return result
@@ -81,7 +90,7 @@ class SiriDBAsyncConnection():
             if sleep == interval:
                 logging.debug('Send keep-alive package...')
                 try:
-                    await self._protocol.send_package(npt.CPROTO_REQ_PING,
+                    await self._protocol.send_package(CPROTO_REQ_PING,
                                                       timeout=15)
                 except asyncio.CancelledError:
                     break
@@ -95,11 +104,11 @@ class SiriDBAsyncConnection():
                       password,
                       dbname,
                       host='127.0.0.1',
-                      port=c.DEFAULT_CLIENT_PORT,
+                      port=DEFAULT_CLIENT_PORT,
                       loop=None,
                       timeout=10,
                       keepalive=False,
-                      protocol=SiriClientProtocol):
+                      protocol=_SiriDBProtocol):
         loop = loop or asyncio.get_event_loop()
         client = loop.create_connection(
             lambda: protocol(username, password, dbname),
@@ -123,7 +132,7 @@ class SiriDBAsyncConnection():
 
     async def query(self, query, time_precision=None, timeout=3600):
         result = await self._protocol.send_package(
-            npt.CPROTO_REQ_QUERY,
+            CPROTO_REQ_QUERY,
             data=(query, time_precision),
             timeout=timeout)
         self._last_resp = time.time()
@@ -131,7 +140,7 @@ class SiriDBAsyncConnection():
 
     async def insert(self, data, timeout=3600):
         result = await self._protocol.send_package(
-            npt.CPROTO_REQ_INSERT,
+            CPROTO_REQ_INSERT,
             data=data,
             timeout=timeout)
         self._last_resp = time.time()

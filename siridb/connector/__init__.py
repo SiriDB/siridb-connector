@@ -1,7 +1,11 @@
 import os
 import sys
+import asyncio
 from .lib.protocol import _SiriDBProtocol
+from .lib.protocol import _SiriDBInfoProtocol
 from .lib.connection import SiriDBConnection
+from .lib.defaults import DEFAULT_CLIENT_PORT
+from .lib.client import SiriDBClient
 
 
 class SiriDBProtocol(_SiriDBProtocol):
@@ -12,7 +16,7 @@ class SiriDBProtocol(_SiriDBProtocol):
     def on_authenticated(self):
         pass
 
-    def on_connection_lost(self):
+    def on_connection_lost(self, exc):
         pass
 
 
@@ -20,10 +24,10 @@ def connect(username,
             password,
             dbname,
             host='127.0.0.1',
-            port=c.DEFAULT_CLIENT_PORT,
+            port=DEFAULT_CLIENT_PORT,
             loop=None,
             timeout=10,
-            protocol=SiriClientProtocol):
+            protocol=SiriDBProtocol):
 
     return SiriDBConnection(
         username,
@@ -40,11 +44,11 @@ async def async_connect(username,
                         password,
                         dbname,
                         host='127.0.0.1',
-                        port=c.DEFAULT_CLIENT_PORT,
+                        port=DEFAULT_CLIENT_PORT,
                         loop=None,
                         timeout=10,
                         keepalive=False,
-                        protocol=SiriClientProtocol):
+                        protocol=SiriDBProtocol):
 
     connection = SiriDBAsyncConnection()
     await connection.connect(
@@ -61,8 +65,26 @@ async def async_connect(username,
     return connection
 
 
+async def async_server_info(host='127.0.0.1',
+                            port=DEFAULT_CLIENT_PORT,
+                            loop=None,
+                            timeout=10):
+    loop = loop or asyncio.get_event_loop()
+    client = loop.create_connection(
+        lambda: _SiriDBInfoProtocol(None, None, None),
+        host=host,
+        port=port)
+    transport, protocol = \
+        await asyncio.wait_for(client, timeout=timeout)
+    await protocol.future
+    transport.close()
+    return protocol._info
+
 
 __all__ = [
-    'connect',
     'async_connect',
-    'SiriDBProtocol']
+    'async_server_info',
+    'connect',
+    'SiriDBClient',
+    'SiriDBProtocol',
+]
