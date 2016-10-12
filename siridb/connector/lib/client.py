@@ -159,6 +159,10 @@ class SiriDBClient:
                               trigger_connect=self._trigger_connect,
                               inactive_time=inactive_time)
 
+    @property
+    def is_closed(self):
+        return not self._retry_connect
+
     @staticmethod
     def _log_connect_result(result):
         for r in result:
