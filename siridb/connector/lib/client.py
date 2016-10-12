@@ -161,6 +161,7 @@ class SiriDBClient:
 
     @property
     def is_closed(self):
+        '''Can be used to check if close() has been called.'''
         return not self._retry_connect
 
     @staticmethod

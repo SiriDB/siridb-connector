@@ -1,3 +1,7 @@
+2016.x.x, Version 2.0.2 (BETA)
+
+    - Added is_closed property to client.
+
 2016.10.03, Version 2.0.1 (BETA)
 
     - Fixed bug in setup.py
