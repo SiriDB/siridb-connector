@@ -93,7 +93,7 @@ class _SiriDBProtocol(asyncio.Protocol):
 
         self.remote_ip, self.port = transport.get_extra_info('peername')[:2]
 
-        logging.info(
+        logging.debug(
             'Connection made (address: {} port: {})'
             .format(self.remote_ip, self.port))
 
@@ -112,7 +112,7 @@ class _SiriDBProtocol(asyncio.Protocol):
         '''
         self._connected = False
 
-        logging.info(
+        logging.debug(
             'Connection lost (address: {} port: {})'
             .format(self.remote_ip, self.port))
 
@@ -245,7 +245,7 @@ class _SiriDBInfoProtocol(_SiriDBProtocol):
         self.transport = transport
         self.remote_ip, self.port = transport.get_extra_info('peername')[:2]
 
-        logging.info(
+        logging.debug(
             'Connection made (address: {} port: {})'
             .format(self.remote_ip, self.port))
 
