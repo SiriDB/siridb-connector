@@ -169,13 +169,11 @@ class SiriDBClient:
         for r in result:
             if r:
                 logging.error(r)
-                if isinstance(r, (IndexError, AuthenticationError)):
-                    break
 
     async def connect(self, timeout=None):
         self._retry_connect = True
         result = await self._connect(timeout)
-        if result and set(result) - {None}:
+        if result and set(result) - {None} and self._connect_task is None:
             self._connect_task = asyncio.ensure_future(self._connect_loop())
         return result
 

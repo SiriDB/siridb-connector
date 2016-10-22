@@ -1,7 +1,11 @@
+2016.10.22, Version 2.0.3 (BETA)
+
+    - Fixed handling authentication errors correctly. (issue #2)
+
 2016.10.21, Version 2.0.2 (BETA)
 
     - Added is_closed property to client.
-    - New and closed connections logging is set from info to debug
+    - New and closed connections logging is set from info to debug. (issue #1)
 
 2016.10.03, Version 2.0.1 (BETA)
 
