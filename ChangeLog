@@ -1,3 +1,7 @@
+2016.x.x, Version 2.x.x (BETA)
+
+    - Check for correct types using assert in query method.
+
 2016.10.22, Version 2.0.3 (BETA)
 
     - Fixed handling authentication errors correctly. (issue #2)
