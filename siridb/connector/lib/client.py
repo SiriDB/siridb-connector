@@ -186,7 +186,7 @@ class SiriDBClient:
             if connection.connected:
                 connection.close()
 
-    async def insert(self, data, timeout=3600):
+    async def insert(self, data, timeout=300):
         while True:
             connection = self._get_random_connection()
 
@@ -200,7 +200,7 @@ class SiriDBClient:
             else:
                 return result
 
-    async def query(self, query, time_precision=None, timeout=3600):
+    async def query(self, query, time_precision=None, timeout=60):
         assert isinstance(query, (str, bytes)), \
             'query should be of type str, unicode or bytes'
 
