@@ -3,11 +3,6 @@ SiriDB - Connector
 
 This manual describes how to install and configure SiriDB Connector for Python 3, a self-contained Python driver for communicating with SiriDB servers, and how to use it to develop database applications.
 
->Warning:
->--------
->This is still a BETA version and can only be used to connect
->with SiriDB version 2.x
-
 
 Installation
 ------------
@@ -24,3 +19,35 @@ From source code
 python setup.py install
 ```
 
+Example
+-------
+
+```python
+import asyncio
+from siridb.connector import SiriDBClient
+
+async def example(siri):
+    # Start connecting to SiriDB.
+    # .connect() returns a list of all connections referring to the supplied
+    # hostlist. The list can contain exceptions in case a connection could not
+    # be made.    
+    await siri.connect()
+    
+    try:
+        resp = await siri.query('show')
+        print(resp)
+    finally:
+        # Close all SiriDB connections.
+        siri.close()
+
+
+siri = SiriDBClient(
+    username='iris',
+    password='siri',
+    dbname='dbtest',
+    hostlist=[('localhost', 9000)],
+    keepalive=True)
+
+loop = asyncio.get_event_loop()
+loop.run_until_complete(example(siri))
+```
