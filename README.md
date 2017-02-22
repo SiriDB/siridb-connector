@@ -45,7 +45,7 @@ siri = SiriDBClient(
     username='iris',
     password='siri',
     dbname='dbtest',
-    hostlist=[('localhost', 9000)],
+    hostlist=[('localhost', 9000)],  # Multiple connections are supported
     keepalive=True)
 
 loop = asyncio.get_event_loop()
