@@ -8,7 +8,7 @@ from .lib.defaults import DEFAULT_CLIENT_PORT
 from .lib.client import SiriDBClient
 
 
-__version_info__ = (2, 0, 3)
+__version_info__ = (2, 0, 4)
 __version__ = '.'.join(map(str, __version_info__))
 __maintainer__ = 'Jeroen van der Heijden'
 __email__ = 'jeroen@transceptor.technology'
