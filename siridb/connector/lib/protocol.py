@@ -237,15 +237,10 @@ class _SiriDBProtocol(asyncio.Protocol):
 
 class _SiriDBInfoProtocol(_SiriDBProtocol):
 
-    _info = []
-
     def connection_made(self, transport):
         '''
         override _SiriDBProtocol
         '''
-        def finished(future):
-            if not future.exception():
-                self._info = future.result()
 
         self.transport = transport
         self.remote_ip, self.port = transport.get_extra_info('peername')[:2]
@@ -258,5 +253,3 @@ class _SiriDBInfoProtocol(_SiriDBProtocol):
                 protomap.CPROTO_REQ_INFO,
                 data=None,
                 timeout=10)
-
-        self.future.add_done_callback(finished)

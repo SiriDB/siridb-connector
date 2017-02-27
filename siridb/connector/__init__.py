@@ -88,8 +88,9 @@ async def async_server_info(host='127.0.0.1',
         port=port)
     transport, protocol = \
         await asyncio.wait_for(client, timeout=timeout)
-    await protocol.future
+
+    result = await protocol.future
     transport.close()
-    return protocol._info
+    return result
 
 
