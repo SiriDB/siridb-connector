@@ -27,7 +27,16 @@ class SiriDBConnection():
             port=port)
         self._transport, self._protocol = self._loop.run_until_complete(
             asyncio.wait_for(client, timeout=timeout))
-        self._loop.run_until_complete(self._protocol.auth_future)
+        self._loop.run_until_complete(self._wait_for_auth())
+
+    async def _wait_for_auth(self):
+        try:
+            res = await self._protocol.auth_future
+        except Exception as exc:
+            logging.debug('Authentication failed: {}'.format(exc))
+            self._transport.close()
+        else:
+            self._protocol.on_authenticated()
 
     def close(self):
         if hasattr(self, '_protocol') and hasattr(self._protocol, 'transport'):
@@ -118,7 +127,15 @@ class SiriDBAsyncConnection():
         self._timeout = timeout
         _transport, self._protocol = \
             await asyncio.wait_for(client, timeout=timeout)
-        await self._protocol.auth_future
+
+        try:
+            res = await self._protocol.auth_future
+        except Exception as exc:
+            logging.debug('Authentication failed: {}'.format(exc))
+            _transport.close()
+        else:
+            self._protocol.on_authenticated()
+
         self._last_resp = time.time()
         if keepalive and (self._keepalive is None or self._keepalive.done()):
             self._keepalive = asyncio.ensure_future(self.keepalive_loop())

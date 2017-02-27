@@ -204,8 +204,8 @@ class SiriDBClient:
         assert isinstance(query, (str, bytes)), \
             'query should be of type str, unicode or bytes'
 
-        assert timePrecision is None or isinstance(timePrecision, int), \
-            'timePrecision should be None or an int type.'
+        assert time_precision is None or isinstance(time_precision, int), \
+            'time_precision should be None or an int type.'
 
         try_unavailable = True
         while True:

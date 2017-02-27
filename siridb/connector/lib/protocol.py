@@ -84,13 +84,6 @@ class _SiriDBProtocol(asyncio.Protocol):
         '''
         override asyncio.Protocol
         '''
-        def finished(future):
-            exc = future.exception()
-            if not exc:
-                self.on_authenticated()
-            else:
-                logging.debug('Authentication failed: {}'.format(exc))
-                self.transport.close()
 
 
         self._connected = True
@@ -107,7 +100,7 @@ class _SiriDBProtocol(asyncio.Protocol):
                                                    self._password,
                                                    self._dbname),
                                              timeout=10)
-        self.auth_future.add_done_callback(finished)
+
         self._password = None
         self.on_connection_made()
 
