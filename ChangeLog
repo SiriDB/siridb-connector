@@ -1,3 +1,7 @@
+2017.03.09, Version 2.0.5 (BETA)
+
+    - Raise Authentication Errors on connect.
+
 2017.02.27, Version 2.0.4 (BETA)
 
     - Check for correct types using assert in query method.

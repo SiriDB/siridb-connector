@@ -9,17 +9,18 @@ from .protomap import CPROTO_REQ_REGISTER_SERVER
 from .protomap import CPROTO_REQ_PING
 from .protomap import FILE_MAP
 
+
 class SiriDBConnection():
 
     def __init__(self,
-                username,
-                password,
-                dbname,
-                host='127.0.0.1',
-                port=DEFAULT_CLIENT_PORT,
-                loop=None,
-                timeout=10,
-                protocol=_SiriDBProtocol):
+                 username,
+                 password,
+                 dbname,
+                 host='127.0.0.1',
+                 port=DEFAULT_CLIENT_PORT,
+                 loop=None,
+                 timeout=10,
+                 protocol=_SiriDBProtocol):
         self._loop = loop or asyncio.get_event_loop()
         client = self._loop.create_connection(
             lambda: protocol(username, password, dbname),
@@ -35,6 +36,7 @@ class SiriDBConnection():
         except Exception as exc:
             logging.debug('Authentication failed: {}'.format(exc))
             self._transport.close()
+            raise exc
         else:
             self._protocol.on_authenticated()
 
@@ -133,6 +135,7 @@ class SiriDBAsyncConnection():
         except Exception as exc:
             logging.debug('Authentication failed: {}'.format(exc))
             _transport.close()
+            raise exc
         else:
             self._protocol.on_authenticated()
 
