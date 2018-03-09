@@ -13,9 +13,9 @@ setup(
     description='SiriDB Connector',
     author='Jeroen van der Heijden',
     author_email='jeroen@transceptor.technology',
-    url='https://github.com/transceptor-technology/siridb-connector',
+    url='https://github.com/SiriDB/siridb-connector',
     download_url=
-        'https://github.com/transceptor-technology/'
+        'https://github.com/SiriDB/'
         'siridb-connector/tarball/{}'.format(VERSION),
     keywords=['siridb', 'connector', 'database', 'client'],
     classifiers=[
