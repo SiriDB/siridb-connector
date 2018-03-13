@@ -25,6 +25,7 @@ Example
 ```python
 import asyncio
 import time
+import random
 from siridb.connector import SiriDBClient
 
 async def example(siri):
