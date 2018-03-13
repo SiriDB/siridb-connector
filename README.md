@@ -24,18 +24,27 @@ Example
 
 ```python
 import asyncio
+import time
+import random
 from siridb.connector import SiriDBClient
 
 async def example(siri):
     # Start connecting to SiriDB.
     # .connect() returns a list of all connections referring to the supplied
     # hostlist. The list can contain exceptions in case a connection could not
-    # be made.    
+    # be made.
     await siri.connect()
-    
+
     try:
-        resp = await siri.query('show')
+        # insert
+        ts = int(time.time())
+        value = random.random()
+        await siri.insert({'some_measurement': [[ts, value]]})
+
+        # query
+        resp = await siri.query('select * from "some_measurement"')
         print(resp)
+
     finally:
         # Close all SiriDB connections.
         siri.close()
