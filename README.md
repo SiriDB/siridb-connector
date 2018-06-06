@@ -97,9 +97,9 @@ Arguments:
 
 
     Example:```python
-    hostlist=[('server1.local', 9000, {'weight': 3}),
-                ('server2.local', 9000),
-                ('backup1.local', 9000, {'backup': True})]
+    hostlist=[ ('server1.local', 9000, {'weight': 3}),
+               ('server2.local', 9000),
+               ('backup1.local', 9000, {'backup': True}) ]
     ```
     Each server should at least have a hostname and port
     number. Optionally you can provide a dictionary with
