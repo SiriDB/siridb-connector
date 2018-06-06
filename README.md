@@ -89,12 +89,18 @@ siri = SiriDBClient(
 ```
 ******************************************************************************
 Arguments:
-* username: User with permissions to use the database.
-* password: Password for the given username.
-* dbname: Name of the database.
-* hostlist: List with SiriDB servers. (all servers or a subset of
+* __username__: User with permissions to use the database.
+* __password__: Password for the given username.
+* __dbname__: Name of the database.
+* __hostlist__: List with SiriDB servers. (all servers or a subset of
   servers can be in this list.)
 
+Example:
+```python
+hostlist=[('server1.local', 9000, {'weight': 3}),
+            ('server2.local', 9000),
+            ('backup1.local', 9000, {'backup': True})]
+```
 Each server should at least have a hostname and port
 number. Optionally you can provide a dictionary with
 extra options.
@@ -108,12 +114,6 @@ Available Options:
             will only be chosen if no other server is
             available. (default: False)
 
-Example:
-```python
-hostlist=[('server1.local', 9000, {'weight': 3}),
-            ('server2.local', 9000),
-            ('backup1.local', 9000, {'backup': True})]
-```
 ******************************************************************************
 
 ### SiriDBClient.connect
