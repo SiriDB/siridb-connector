@@ -101,18 +101,18 @@ Arguments:
                 ('server2.local', 9000),
                 ('backup1.local', 9000, {'backup': True})]
     ```
-Each server should at least have a hostname and port
-number. Optionally you can provide a dictionary with
-extra options.
+    Each server should at least have a hostname and port
+    number. Optionally you can provide a dictionary with
+    extra options.
 
-Available Options:
-- weight : Should be a value between 1 and 9. A higher
-            value gives the server more weight so it will
-            be more likely chosen. (default 1)
-- backup : Should be either True or False. When True the
-            server will be marked as backup server and
-            will only be chosen if no other server is
-            available. (default: False)
+    Available Options:
+    - weight : Should be a value between 1 and 9. A higher
+                value gives the server more weight so it will
+                be more likely chosen. (default 1)
+    - backup : Should be either True or False. When True the
+                server will be marked as backup server and
+                will only be chosen if no other server is
+                available. (default: False)
 
 ******************************************************************************
 
