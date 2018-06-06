@@ -87,32 +87,35 @@ siri = SiriDBClient(
     hostlist=[('localhost', 9000)],  # Multiple connections are supported
     keepalive=True)
 ```
+
+------------------------------------------------------------------------------
 Arguments:
-            username: User with permissions to use the database.
-            password: Password for the given username.
-            dbname: Name of the database.
-            hostlist: List with SiriDB servers. (all servers or a subset of
-                      servers can be in this list.)
+username: User with permissions to use the database.
+password: Password for the given username.
+dbname: Name of the database.
+hostlist: List with SiriDB servers. (all servers or a subset of
+servers can be in this list.)
 
-                      Example:
-                      [
-                          ('server1.local', 9000, {'weight': 3}),
-                          ('server2.local', 9000),
-                          ('backup1.local', 9000, {'backup': True})
-                      ]
+Example:
+`[
+    ('server1.local', 9000, {'weight': 3}),
+    ('server2.local', 9000),
+    ('backup1.local', 9000, {'backup': True})
+]`
 
-                      Each server should at least have a hostname and port
-                      number. Optionally you can provide a dictionary with
-                      extra options.
+Each server should at least have a hostname and port
+number. Optionally you can provide a dictionary with
+extra options.
 
-                      Available Options:
-                      - weight : Should be a value between 1 and 9. A higher
-                                 value gives the server more weight so it will
-                                 be more likely chosen. (default 1)
-                      - backup : Should be either True or False. When True the
-                                 server will be marked as backup server and
-                                 will only be chosen if no other server is
-                                 available. (default: False)
+Available Options:
+- weight : Should be a value between 1 and 9. A higher
+            value gives the server more weight so it will
+            be more likely chosen. (default 1)
+- backup : Should be either True or False. When True the
+            server will be marked as backup server and
+            will only be chosen if no other server is
+            available. (default: False)
+------------------------------------------------------------------------------
 
 ### SiriDBClient.connect
 
