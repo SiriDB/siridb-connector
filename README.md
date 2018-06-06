@@ -95,8 +95,8 @@ Arguments:
 * __hostlist__: List with SiriDB servers. (all servers or a subset of
   servers can be in this list.)
 
-    Example:
-    ```python
+
+    Example:```python
     hostlist=[('server1.local', 9000, {'weight': 3}),
                 ('server2.local', 9000),
                 ('backup1.local', 9000, {'backup': True})]
