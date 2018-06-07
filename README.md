@@ -148,8 +148,8 @@ The following exceptions can be returned:
  *Raised when an unknown package is received. (might be caused by running a different SiriDB version).*
 - `RuntimeError`:
  *Raised when a general error message is received. This should no happen unless a new bug is discovered.*
-- `OverflowError`:
- (can only be raised when using the insert() method) *Raise when integer values cannot not be packed due to an overflow error. (integer values should be signed and not more than 63 bits)*
+- `OverflowError` (can only be raised when using the insert() method):
+*Raise when integer values cannot not be packed due to an overflow error. (integer values should be signed and not more than 63 bits)*
 - `UserAuthError`:
  *The user as no rights to perform the insert or query.*
 
