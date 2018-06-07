@@ -132,13 +132,9 @@ siri.connect()
 
 ## Exception codes
 
-Exception handling:
-
-Sometimes its useful to act on a specific error, for example you might want to retry the request in case of `ERR_SERVER` while a `ERR_INSERT` error indicates something is wrong with the data.
-
 The following exceptions can be returned:
 
-- `InsertError` (can only be raised when using the insert() method)
+- `InsertError` (can only be raised when using the insert() method)  return
  *Make sure the data is correct because this only happens when SiriDB could not process the request. It is likely to fail again on a retry.*
 - `QueryError` (can only be raised when using the query() method)
  *Make sure the query is correct because this only happens when SiriDB could not process the query. It is likely to fail again.*
