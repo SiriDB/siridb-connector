@@ -134,23 +134,23 @@ siri.connect()
 
 The following exceptions can be returned:
 
-- `InsertError` (can only be raised when using the insert() method)  </br>
+- `InsertError` (can only be raised when using the insert() method)  <br />
  *Make sure the data is correct because this only happens when SiriDB could not process the request. It is likely to fail again on a retry.*
-- `QueryError` (can only be raised when using the query() method)
+- `QueryError` (can only be raised when using the query() method) <br />
  *Make sure the query is correct because this only happens when SiriDB could not process the query. It is likely to fail again.*
-- `PoolError`
+- `PoolError` <br />
  *SiriDB has no online server for at least one required pool. Try again later after some reasonable delay.*
-- `AuthenticationError`
+- `AuthenticationError` <br />
  *Raised when credentials are invalid or insufficient.*
-- `IndexError`
+- `IndexError` <br />
  *Raised when the database does not exist (anymore).*
-- `TypeError`
+- `TypeError` <br />
  *Raised when an unknown package is received. (might be caused by running a different SiriDB version).*
-- `RuntimeError`
+- `RuntimeError` <br />
  *Raised when a general error message is received. This should no happen unless a new bug is discovered.*
-- `OverflowError`
+- `OverflowError` <br />
  (can only be raised when using the insert() method) *Raise when integer values cannot not be packed due to an overflow error. (integer values should be signed and not more than 63 bits)*
-- `UserAuthError`
+- `UserAuthError` <br />
  *The user as no rights to perform the insert or query.*
 
 
