@@ -21,6 +21,7 @@ _MAP = (
     lambda data: data
 )
 
+
 def _packdata(tipe, data=None):
     assert tipe in protomap.MAP_REQ_DTYPE, \
         'No data type found for message type: {}'.format(tipe)
@@ -64,7 +65,8 @@ class _SiriDBProtocol(asyncio.Protocol):
         protomap.CPROTO_ERR_AUTH_UNKNOWN_DB: lambda f, d: f.set_exception(
             AuthenticationError('Unknown database')),
         protomap.CPROTO_ERR_LOADING_DB: lambda f, d: f.set_exception(
-            RuntimeError('Error loading database, '
+            RuntimeError(
+                'Error loading database, '
                 'please check the SiriDB log files')),
         protomap.CPROTO_ERR_FILE: lambda f, d: f.set_exception(
             RuntimeError('Error retreiving file')),
@@ -84,7 +86,6 @@ class _SiriDBProtocol(asyncio.Protocol):
         '''
         override asyncio.Protocol
         '''
-
 
         self._connected = True
         self.transport = transport

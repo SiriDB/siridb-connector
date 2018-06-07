@@ -3,6 +3,7 @@
 :copyright: 2016, Jeroen van der Heijden (Transceptor Technology)
 '''
 
+
 class QueryError(Exception):
     pass
 
@@ -25,5 +26,3 @@ class AuthenticationError(Exception):
 
 class UserAuthError(AuthenticationError):
     pass
-
-

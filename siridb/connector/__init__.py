@@ -93,5 +93,3 @@ async def async_server_info(host='127.0.0.1',
     result = await protocol.future
     transport.close()
     return result
-
-
