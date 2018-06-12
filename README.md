@@ -102,8 +102,8 @@ Arguments:
     Example:
     ```python
     hostlist=[ ('server1.local', 9000, {'weight': 3}),
-               ('server2.local', 9000),
-               ('backup1.local', 9000, {'backup': True}) ]
+               ('server2.local', 9001),
+               ('backup1.local', 9002, {'backup': True}) ]
     ```
     Each server should at least have a hostname and port
     number. Optionally you can provide a dictionary with
@@ -117,7 +117,7 @@ Arguments:
                 server will be marked as backup server and
                 will only be chosen if no other server is
                 available. (default: False)
-<br>
+</br>
 Keyword arguments:
 * __loop__: Asyncio loop. When 'None' the default event loop will be used.
 * __keepalive__: SiriDB Version >= 0.9.35 supporting keep-alive packages.
