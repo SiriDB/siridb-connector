@@ -189,15 +189,15 @@ The following exceptions can be returned:
 - `RuntimeError`:
  *Raised when a general error message is received. This should no happen unless a new bug is discovered.*
 - `OverflowError` (can only be raised when using the `.insert()` method):
- *Raise when integer values cannot not be packed due to an overflow error. (integer values should be signed and not more than 63 bits)*
+ *Raised when integer values cannot not be packed due to an overflow error. (integer values should be signed and not more than 63 bits)*
 - `UserAuthError`:
  *The user as no rights to perform the insert or query.*
 
 
 - `ServerError`:
- *blabla*
-- `asyncio.TimeoutError`:
- *The timeout is exceeded.*
+ *Raised when a server could not perform the request, you could try another server if one is available*
+- `TimeoutError`:
+ *Raised when a process lasts longer than the `timeout` period*
 
 
 ## Version info
