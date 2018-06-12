@@ -20,7 +20,7 @@ This manual describes how to install and configure SiriDB Connector for Python 3
 ## Installation
 ------------
 
-From PyPI (recommend)
+From PyPI (recommended)
 
 ```
 pip install siridb-connector
@@ -84,8 +84,12 @@ siri = SiriDBClient(
     username=<username>,
     password=<password>,
     dbname=<dbname>,
-    hostlist=[(<host>, <port>)],  # Multiple connections are supported
-    keepalive=True)
+    hostlist=[(<host>, <port>, {weight: 1}, {backup: False})],  # Multiple connections are supported
+    loop=None,
+    keepalive=True,
+    timeout=10,
+    inactive_time=30,
+    max_wait_retry=90)
 ```
 
 Arguments:
@@ -113,6 +117,7 @@ Arguments:
                 server will be marked as backup server and
                 will only be chosen if no other server is
                 available. (default: False)
+<br>
 Keyword arguments:
 * __loop__: Asyncio loop. When 'None' the default event loop will be used.
 * __keepalive__: SiriDB Version >= 0.9.35 supporting keep-alive packages.
