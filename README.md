@@ -81,10 +81,10 @@ Create a new SiriDB Client. This creates a new client but `.connect()` must be u
 
 ```python
 siri = SiriDBClient(
-    username='iris',
-    password='siri',
-    dbname='dbtest',
-    hostlist=[('localhost', 9000)],  # Multiple connections are supported
+    username=<username>,
+    password=<password>,
+    dbname=<dbname>,
+    hostlist=[(<host>, <port>)],  # Multiple connections are supported
     keepalive=True)
 ```
 
@@ -113,22 +113,55 @@ Arguments:
                 server will be marked as backup server and
                 will only be chosen if no other server is
                 available. (default: False)
-
+Keyword arguments:
+* __loop__: Asyncio loop. When 'None' the default event loop will be used.
+* __keepalive__: SiriDB Version >= 0.9.35 supporting keep-alive packages.
+* __timeout__: Timeout used when reconnecting to a SiriDB server.
+* __inactive_time__: When a server is temporary not available, for
+example the server could be paused, we mark the server inactive for x seconds.
+* __max_wait_retry__: When the reconnect loop starts, we try to reconnect in 1 second, then 2 seconds, 4, 8 and so on until __max_wait_retry__ is reached and then use this value to retry again.
 ******************************************************************************
 
 ### SiriDBClient.connect
 
-Start connecting to SiriDB. .connect() returns a list of all connections referring to the supplied hostlist. The list can contain exceptions in case a connection could not be made
+Start connecting to SiriDB. `.connect()` returns a list of all connections referring to the supplied hostlist. The list can contain exceptions in case a connection could not be made.
+
+Optionally a 'timeout' can be set which will constrain the time to search for a connection. Exceeding this timeout will raise an `.TimeoutError`.
+
 ```
-siri.connect()
+siri.connect(timeout=None)
 ```
 
 ### SiriDBClient.insert
 
+Insert time series data into SiriDB. Requires a 'Dictionary' with at least one series.
+Optionally the timeout can be adjusted which in default is set to 300 seconds.
+
+```
+siri.insert(data, timeout=300)
+```
+
 ### SiriDBClient.query
 
-### SiriDBClient.close
+Query data out of the database. Requires a string containing the query. More about the query language can be found at: [QueryLanguage](http://siridb.net/docs/). Optionally a time precision can be set which should be an integer. Also the timeout can be adjusted which in default is 60 seconds.
 
+```
+siri.query(query, time_precision=None, timeout=60)
+```
+
+### SiriDBClient.close and SiriDBClient.is_closed
+
+Close the connection.
+
+```
+siri.close()
+```
+
+If the connection is closed can be checked with the following call.
+
+```
+siri.is_closed()
+```
 
 ## Exception codes
 
@@ -149,10 +182,15 @@ The following exceptions can be returned:
 - `RuntimeError`:
  *Raised when a general error message is received. This should no happen unless a new bug is discovered.*
 - `OverflowError` (can only be raised when using the `.insert()` method):
-*Raise when integer values cannot not be packed due to an overflow error. (integer values should be signed and not more than 63 bits)*
+ *Raise when integer values cannot not be packed due to an overflow error. (integer values should be signed and not more than 63 bits)*
 - `UserAuthError`:
  *The user as no rights to perform the insert or query.*
 
+
+- `ServerError`:
+ *blabla*
+- `asyncio.TimeoutError`:
+ *The timeout is exceeded.*
 
 
 ## Version info
