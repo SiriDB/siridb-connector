@@ -99,6 +99,7 @@ Arguments:
 * __hostlist__: List with SiriDB servers (all servers or a subset of
 servers can be in this list).
 
+
     *Example:*
     ```python
     hostlist=[ ('server1.local', 9000, {'weight': 3}),
@@ -117,6 +118,7 @@ servers can be in this list).
                 server will be marked as backup server and
                 will only be chosen if no other server is
                 available. (default: False)
+
 
 Keyword arguments:
 * __loop__: Asyncio loop. When 'None' the default event loop will be used.
