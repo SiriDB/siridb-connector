@@ -117,7 +117,7 @@ Arguments:
                 server will be marked as backup server and
                 will only be chosen if no other server is
                 available. (default: False)
-<br />
+
 Keyword arguments:
 * __loop__: Asyncio loop. When 'None' the default event loop will be used.
 * __keepalive__: SiriDB Version >= 0.9.35 supporting keep-alive packages.
