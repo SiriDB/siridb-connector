@@ -124,7 +124,7 @@ Keyword arguments:
 * __timeout__: Timeout used when reconnecting to a SiriDB server.
 * __inactive_time__: When a server is temporary not available, for
 example the server could be paused, we mark the server inactive for x seconds.
-* __max_wait_retry__: When the reconnect loop starts, we try to reconnect in 1 second, then 2 seconds, 4, 8 and so on until __max_wait_retry__ is reached and then use this value to retry again.
+* __max_wait_retry__: When the reconnect loop starts, we try to reconnect in 1 second, then 2 seconds, 4, 8 and so on until max_wait_retry is reached and then use this value to retry again.
 ******************************************************************************
 
 ### SiriDBClient.connect
@@ -133,7 +133,7 @@ Start connecting to SiriDB. `.connect()` returns a list of all connections refer
 
 Optionally a 'timeout' can be set which will constrain the time to search for a connection. Exceeding this timeout will raise an `.TimeoutError`.
 
-```
+```python
 siri.connect(timeout=None)
 ```
 
@@ -142,7 +142,7 @@ siri.connect(timeout=None)
 Insert time series data into SiriDB. Requires a 'Dictionary' with at least one series.
 Optionally the timeout can be adjusted which in default is set to 300 seconds.
 
-```
+```python
 siri.insert(data, timeout=300)
 ```
 
@@ -150,7 +150,7 @@ siri.insert(data, timeout=300)
 
 Query data out of the database. Requires a string containing the query. More about the query language can be found [here](http://siridb.net/docs/). Optionally a time precision can be set which should be an integer. Also the timeout can be adjusted which in default is 60 seconds.
 
-```
+```python
 siri.query(query, time_precision=None, timeout=60)
 ```
 
@@ -158,13 +158,13 @@ siri.query(query, time_precision=None, timeout=60)
 
 Close the connection.
 
-```
+```python
 siri.close()
 ```
 
 To check if the connection is closed, can be done with the following call.
 
-```h
+```python
 siri.is_closed()
 ```
 
