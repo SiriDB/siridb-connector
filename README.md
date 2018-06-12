@@ -149,7 +149,7 @@ Query data out of the database. Requires a string containing the query. More abo
 siri.query(query, time_precision=None, timeout=60)
 ```
 
-### SiriDBClient.close and SiriDBClient.is_closed
+### SiriDBClient.close
 
 Close the connection.
 
@@ -157,9 +157,9 @@ Close the connection.
 siri.close()
 ```
 
-If the connection is closed can be checked with the following call.
+To check if the connection is closed, can be done with the following call.
 
-```
+```h
 siri.is_closed()
 ```
 
