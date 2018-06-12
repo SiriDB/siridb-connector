@@ -143,7 +143,7 @@ siri.insert(data, timeout=300)
 
 ### SiriDBClient.query
 
-Query data out of the database. Requires a string containing the query. More about the query language can be found [here](http://siridb.net/docs/ target="_blank"). Optionally a time precision can be set which should be an integer. Also the timeout can be adjusted which in default is 60 seconds.
+Query data out of the database. Requires a string containing the query. More about the query language can be found <a href="http://siridb.net/doc" target="_blank">here</a>. Optionally a time precision can be set which should be an integer. Also the timeout can be adjusted which in default is 60 seconds.
 
 ```
 siri.query(query, time_precision=None, timeout=60)
