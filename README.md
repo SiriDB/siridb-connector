@@ -97,7 +97,7 @@ Arguments:
 * __password__: Password for the given username.
 * __dbname__: Name of the database.
 * __hostlist__: List with SiriDB servers. (all servers or a subset of
-  servers can be in this list.)
+servers can be in this list.)
 
     Example:
     ```python
