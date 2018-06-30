@@ -112,10 +112,10 @@ servers can be in this list).
     extra options.
 
     Available Options:
-    - __weight__ : Should be a value between 1 and 9. A higher
+    -__weight__ : Should be a value between 1 and 9. A higher
                 value gives the server more weight so it will
                 be more likely chosen. (default 1)
-    - __backup__ : Should be either True or False. When True the
+    -__backup__ : Should be either True or False. When True the
                 server will be marked as backup server and
                 will only be chosen if no other server is
                 available. (default: False)
