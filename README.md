@@ -201,7 +201,7 @@ The following exceptions can be returned:
 - `TypeError`:
  *Raised when an unknown package is received (might be caused by running a different SiriDB version).*
 - `UserAuthError`:
- *The user as no rights to perform the insert or query. Consult the [documentation](http://siridb.net/docs/#help_access target="_blank) how to change the access rights.*
+ *The user as no rights to perform the insert or query. Consult the <a href="http://siridb.net/docs/#help_access" target="_blank"> LINKNAME </a>[documentation](http://siridb.net/docs/#help_access) how to change the access rights.*
 
 
 
