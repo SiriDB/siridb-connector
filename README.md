@@ -1,7 +1,8 @@
 SiriDB - Connector
 ==================
 
-This manual describes how to install and configure SiriDB Connector for Python 3, a self-contained Python driver for communicating with SiriDB servers, and how to use it to develop database applications.
+The SiriDB Connector is a self-contained Python driver for communicating with SiriDB servers.
+This manual describes how to install and configure SiriDB Connector for Python 3, and how to use it to develop database applications.
 
 
 ---------------------------------------
@@ -122,10 +123,10 @@ servers can be in this list).
 
 Keyword arguments:
 * __loop__: Asyncio loop. When 'None' the default event loop will be used.
-* __keepalive__: SiriDB Version >= 0.9.35 supporting keep-alive packages.
-* __timeout__: Timeout used when reconnecting to a SiriDB server.
-* __inactive_time__: When a server is temporary not available, for
-example the server could be paused, we mark the server inactive for x seconds.
+* __keepalive__: When 'True' keep-alive packages are send every 45 seconds.
+* __timeout__: Maximum time to complete a process, otherwise it will be cancelled.
+* __inactive_time__: When a server is temporary unavailable, for
+example the server could be paused, we mark the server as inactive after x seconds.
 * __max_wait_retry__: When the reconnect loop starts, we try to reconnect in 1 second, then 2 seconds, 4, 8 and so on until max_wait_retry is reached and then use this value to retry again.
 ******************************************************************************
 
@@ -133,7 +134,7 @@ example the server could be paused, we mark the server inactive for x seconds.
 
 Start connecting to SiriDB. `.connect()` returns a list of all connections referring to the supplied hostlist. The list can contain exceptions in case a connection could not be made.
 
-Optionally a 'timeout' can be set which will constrain the time to search for a connection. Exceeding this timeout will raise an `.TimeoutError`.
+Optionally the keyword argument `timeout` can be set. This will constrain the search time for a connection. Exceeding the timeout will raise an `.TimeoutError`.
 
 ```python
 siri.connect(timeout=None)
@@ -141,8 +142,8 @@ siri.connect(timeout=None)
 
 ### SiriDBClient.insert
 
-Insert time series data into SiriDB. Requires a 'Dictionary' with at least one series.
-Optionally the timeout can be adjusted which in default is set to 300 seconds.
+Insert time series data into SiriDB. Requires a 'dictionary' with at least one series.
+Optionally the __timeout__ can be adjusted (default: 300).
 
 ```python
 siri.insert(data, timeout=300)
@@ -150,9 +151,14 @@ siri.insert(data, timeout=300)
 
 ### SiriDBClient.query
 
-Query data out of the database. Requires a string containing the query. More about the query language can be found [here](http://siridb.net/docs/). Optionally a time precision can be set which should be an integer. Also the timeout can be adjusted which in default is 60 seconds.
+Query data out of the database. Requires a string containing the query. More about the query language can be found [here](http://siridb.net/docs/). The documentation about the query language will make one familiar with a number of useful aggregation and filter functions, different ways of visualizing and grouping the requested data, and make changes to the set up of the database. Optionally a __time precision__ (`SECOND`, `MICROSECOND`, `MILLISECOND`, `NANOSECOND`) can be set. The default `None` sets the precision to seconds. Futhermore the __timeout__ can be adjusted (default: 60).
 
 ```python
+from .constants import (SECOND,
+                        MICROSECOND,
+                        MILLISECOND,
+                        NANOSECOND)
+
 siri.query(query, time_precision=None, timeout=60)
 ```
 
@@ -164,7 +170,7 @@ Close the connection.
 siri.close()
 ```
 
-To check if the connection is closed, can be done with the following call.
+Check if the connection is closed.
 
 ```python
 siri.is_closed()
@@ -174,30 +180,30 @@ siri.is_closed()
 
 The following exceptions can be returned:
 
-- `InsertError` (can only be raised when using the `.insert()` method):
- *Make sure the data is correct because this only happens when SiriDB could not process the request. It is likely to fail again on a retry.*
-- `QueryError` (can only be raised when using the `.query()` method):
- *Make sure the query is correct because this only happens when SiriDB could not process the query. It is likely to fail again.*
-- `PoolError`:
- *SiriDB has no online server for at least one required pool. Try again later after some reasonable delay.*
 - `AuthenticationError`:
  *Raised when credentials are invalid or insufficient.*
 - `IndexError`:
- *Raised when the database does not exist (anymore).*
-- `TypeError`:
- *Raised when an unknown package is received. (might be caused by running a different SiriDB version).*
+*Raised when the database does not exist (anymore).*
+- `InsertError` (can only be raised when using the `.insert()` method):
+ *Make sure the data is correct because this only happens when SiriDB could not process the request. It is likely to fail again on a retry.*
+- `OverflowError` (can only be raised when using the `.insert()` method):
+ *Raised when integer values cannot not be packed due to an overflow error (integer values should be signed and not more than 63 bits).*
+- `PoolError`:
+ *SiriDB has no online server for at least one required pool. Try again later after some reasonable delay.*
+- `QueryError` (can only be raised when using the `.query()` method):
+ *Make sure the query is correct because this only happens when SiriDB could not process the query. It is likely to fail again. Documentation about the query language can be found [here](http://siridb.net/docs/#help_select).*
 - `RuntimeError`:
  *Raised when a general error message is received. This should no happen unless a new bug is discovered.*
-- `OverflowError` (can only be raised when using the `.insert()` method):
- *Raised when integer values cannot not be packed due to an overflow error. (integer values should be signed and not more than 63 bits)*
-- `UserAuthError`:
- *The user as no rights to perform the insert or query.*
-
-
 - `ServerError`:
- *Raised when a server could not perform the request, you could try another server if one is available*
+ *Raised when a server could not perform the request, you could try another server if one is available. Consult the documentation [here](http://siridb.net/docs/#help_list_servers) how to get additional status information about the servers.*
 - `TimeoutError`:
  *Raised when a process lasts longer than the `timeout` period*
+- `TypeError`:
+ *Raised when an unknown package is received (might be caused by running a different SiriDB version).*
+- `UserAuthError`:
+ *The user as no rights to perform the insert or query. Consult the documentation about [access](http://siridb.net/docs/#help_access) to change the access rights.*
 
 
-## Version info
+
+'''## Version info'''
+
