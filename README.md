@@ -85,7 +85,7 @@ siri = SiriDBClient(
     username=<username>,
     password=<password>,
     dbname=<dbname>,
-    hostlist=[(<host>, <port>, {weight: 1}, {backup: False})],  # Multiple connections are supported
+    hostlist=[(<host>, <port>, {weight: 1}, {backup: False})],
     loop=None,
     keepalive=True,
     timeout=10,
@@ -143,7 +143,7 @@ siri.connect(timeout=None)
 ### SiriDBClient.insert
 
 Insert time series data into SiriDB. Requires a 'dictionary' with at least one series.
-Optionally the __timeout__ can be adjusted (default: 300).
+Optionally the `timeout` can be adjusted (default: 300).
 
 ```python
 siri.insert(data, timeout=300)
@@ -151,7 +151,7 @@ siri.insert(data, timeout=300)
 
 ### SiriDBClient.query
 
-Query data out of the database. Requires a string containing the query. More about the query language can be found [here](http://siridb.net/docs/). The documentation about the query language will make one familiar with a number of useful aggregation and filter functions, different ways of visualizing and grouping the requested data, and make changes to the set up of the database. Optionally a __time precision__ (`SECOND`, `MICROSECOND`, `MILLISECOND`, `NANOSECOND`) can be set. The default `None` sets the precision to seconds. Futhermore the __timeout__ can be adjusted (default: 60).
+Query data out of the database. Requires a string containing the query. More about the query language can be found [here](http://siridb.net/docs/). The documentation about the query language will make one familiar with a number of useful aggregation and filter functions, different ways of visualizing and grouping the requested data, and make changes to the set up of the database. Optionally a `time_precision` (`SECOND`, `MICROSECOND`, `MILLISECOND`, `NANOSECOND`) can be set. The default `None` sets the precision to seconds. Futhermore the `timeout` can be adjusted (default: 60).
 
 ```python
 from .constants import (SECOND,
@@ -201,7 +201,7 @@ The following exceptions can be returned:
 - `TypeError`:
  *Raised when an unknown package is received (might be caused by running a different SiriDB version).*
 - `UserAuthError`:
- *The user as no rights to perform the insert or query. Consult the <a href="http://siridb.net/docs/#help_access" target="_blank"> LINKNAME </a>[documentation](http://siridb.net/docs/#help_access) how to change the access rights.*
+ *The user as no rights to perform the insert or query. Consult the [documentation](http://siridb.net/docs/#help_access) how to change the access rights.*
 
 
 
