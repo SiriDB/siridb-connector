@@ -185,25 +185,25 @@ The following exceptions can be returned:
 - `IndexError`:
 *Raised when the database does not exist (anymore).*
 - `InsertError` (can only be raised when using the `.insert()` method):
- *Make sure the data is correct because this only happens when SiriDB could not process the request. It is likely to fail again on a retry.*
+ *Make sure the data is correct because this only happens when SiriDB could not process the request.*
 - `OverflowError` (can only be raised when using the `.insert()` method):
  *Raised when integer values cannot not be packed due to an overflow error (integer values should be signed and not more than 63 bits).*
 - `PoolError`:
  *SiriDB has no online server for at least one required pool. Try again later after some reasonable delay.*
 - `QueryError` (can only be raised when using the `.query()` method):
- *Make sure the query is correct because this only happens when SiriDB could not process the query. It is likely to fail again. Documentation about the query language can be found [here](http://siridb.net/docs/#help_select).*
+ *Make sure the query is correct because this only happens when SiriDB could not process the query. Consult the [documentation](http://siridb.net/docs/#help_select) about the query language can be found.*
 - `RuntimeError`:
  *Raised when a general error message is received. This should no happen unless a new bug is discovered.*
 - `ServerError`:
- *Raised when a server could not perform the request, you could try another server if one is available. Consult the documentation [here](http://siridb.net/docs/#help_list_servers) how to get additional status information about the servers.*
+ *Raised when a server could not perform the request, you could try another server if one is available. Consult the [documentation](http://siridb.net/docs/#help_list_servers) how to get additional status information about the servers.*
 - `TimeoutError`:
  *Raised when a process lasts longer than the `timeout` period*
 - `TypeError`:
  *Raised when an unknown package is received (might be caused by running a different SiriDB version).*
 - `UserAuthError`:
- *The user as no rights to perform the insert or query. Consult the documentation about [access](http://siridb.net/docs/#help_access) to change the access rights.*
+ *The user as no rights to perform the insert or query. Consult the [documentation](http://siridb.net/docs/#help_access target="_blank) how to change the access rights.*
 
 
 
-'''## Version info'''
+## Version info
 
