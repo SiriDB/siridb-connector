@@ -225,7 +225,7 @@ class SiriDBClient:
             # only try unavailable once
             try_unavailable = False
 
-    async def _connect(self, timeout=None):
+    async def _connect(self, timeout=None): # the one that actually connects
         tasks = [
             connection.connect(
                 self._username,
@@ -247,7 +247,7 @@ class SiriDBClient:
         self._log_connect_result(result)
         return result
 
-    async def _connect_loop(self):
+    async def _connect_loop(self): # the one that looks for connections
         sleep = 1
         try:
             while [connection
