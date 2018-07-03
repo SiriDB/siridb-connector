@@ -124,5 +124,3 @@ FILE_MAP = {
     'users.dat': CPROTO_REQ_FILE_USERS,
     'groups.dat': CPROTO_REQ_FILE_GROUPS
 }
-
-
