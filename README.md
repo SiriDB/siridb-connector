@@ -173,7 +173,7 @@ siri.close()
 Check if the connection is closed.
 
 ```python
-siri.is_closed()
+siri.is_closed
 ```
 
 ## Exception codes
