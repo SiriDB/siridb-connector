@@ -154,10 +154,10 @@ siri.insert(data, timeout=300)
 Query data out of the database. Requires a string containing the query. More about the query language can be found [here](http://siridb.net/docs/). The documentation about the query language will inform you about a number of useful aggregation and filter functions, different ways of visualizing and grouping the requested data, and how to make changes to the set up of the database. Optionally a `time_precision` (`SECOND`, `MICROSECOND`, `MILLISECOND`, `NANOSECOND`) can be set. The default `None` sets the precision to seconds. Futhermore the `timeout` can be adjusted (default: 60).
 
 ```python
-from .constants import (SECOND,
-                        MICROSECOND,
-                        MILLISECOND,
-                        NANOSECOND)
+from siridb.connector import (SECOND,
+                              MICROSECOND,
+                              MILLISECOND,
+                              NANOSECOND)
 
 siri.query(query, time_precision=None, timeout=60)
 ```
