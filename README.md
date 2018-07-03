@@ -203,7 +203,3 @@ The following exceptions can be returned:
 - `UserAuthError`:
  *The user as no rights to perform the insert or query. Consult the [documentation](http://siridb.net/docs/#help_access) how to change the access rights.*
 
-
-
-## Version info
-
