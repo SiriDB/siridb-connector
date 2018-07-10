@@ -151,7 +151,7 @@ siri.insert(data, timeout=300)
 
 ### SiriDBClient.query
 
-Query data out of the database. Requires a string containing the query. More about the query language can be found [here](http://siridb.net/docs/). The documentation about the query language will inform you about a number of useful aggregation and filter functions, different ways of visualizing and grouping the requested data, and how to make changes to the set up of the database. Optionally a `time_precision` (`SECOND`, `MICROSECOND`, `MILLISECOND`, `NANOSECOND`) can be set. The default `None` sets the precision to seconds. Futhermore the `timeout` can be adjusted (default: 60).
+Query data out of the database. Requires a string containing the query. More about the query language can be found [here](https://siridb.net/documentation/). The documentation about the query language will inform you about a number of useful aggregation and filter functions, different ways of visualizing and grouping the requested data, and how to make changes to the set up of the database. Optionally a `time_precision` (`SECOND`, `MICROSECOND`, `MILLISECOND`, `NANOSECOND`) can be set. The default `None` sets the precision to seconds. Futhermore the `timeout` can be adjusted (default: 60).
 
 ```python
 from siridb.connector import (SECOND,
@@ -191,15 +191,15 @@ The following exceptions can be returned:
 - `PoolError`:
  *SiriDB has no online server for at least one required pool. Try again later after some reasonable delay.*
 - `QueryError` (can only be raised when using the `.query()` method):
- *Make sure the query is correct because this only happens when SiriDB could not process the query. Consult the [documentation](http://siridb.net/docs/#help_select) about the query language can be found.*
+ *Make sure the query is correct because this only happens when SiriDB could not process the query. Consult the [documentation](https://siridb.net/documentation/#help_select) about the query language can be found.*
 - `RuntimeError`:
  *Raised when a general error message is received. This should no happen unless a new bug is discovered.*
 - `ServerError`:
- *Raised when a server could not perform the request, you could try another server if one is available. Consult the [documentation](http://siridb.net/docs/#help_list_servers) how to get additional status information about the servers.*
+ *Raised when a server could not perform the request, you could try another server if one is available. Consult the [documentation](https://siridb.net/documentation/#help_list_servers) how to get additional status information about the servers.*
 - `TimeoutError`:
  *Raised when a process lasts longer than the `timeout` period*
 - `TypeError`:
  *Raised when an unknown package is received (might be caused by running a different SiriDB version).*
 - `UserAuthError`:
- *The user as no rights to perform the insert or query. Consult the [documentation](http://siridb.net/docs/#help_access) how to change the access rights.*
+ *The user as no rights to perform the insert or query. Consult the [documentation](https://siridb.net/documentation/#help_access) how to change the access rights.*
 
