@@ -5,6 +5,10 @@ from .lib.protocol import _SiriDBProtocol
 from .lib.connection import SiriDBConnection
 from .lib.defaults import DEFAULT_CLIENT_PORT
 from .lib.client import SiriDBClient
+from .lib.constants import SECOND
+from .lib.constants import MICROSECOND
+from .lib.constants import MILLISECOND
+from .lib.constants import NANOSECOND
 
 
 __version_info__ = (2, 0, 6)
@@ -16,6 +20,10 @@ __all__ = [
     'connect',
     'SiriDBClient',
     'SiriDBProtocol',
+    'SECOND',
+    'MICROSECOND',
+    'MILLISECOND',
+    'NANOSECOND'
 ]
 
 

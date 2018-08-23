@@ -8,6 +8,10 @@ from .protomap import CPROTO_REQ_INSERT
 from .protomap import CPROTO_REQ_REGISTER_SERVER
 from .protomap import CPROTO_REQ_PING
 from .protomap import FILE_MAP
+from .constants import SECOND
+from .constants import MICROSECOND
+from .constants import MILLISECOND
+from .constants import NANOSECOND
 
 
 class SiriDBConnection():
@@ -125,6 +129,12 @@ class SiriDBAsyncConnection():
             del self._protocol
 
     async def query(self, query, time_precision=None, timeout=3600):
+        assert time_precision in (
+            None,
+            SECOND,
+            MICROSECOND,
+            MILLISECOND,
+            NANOSECOND), 'time_precision must be either None, 0, 1, 2, 3'
         result = await self._protocol.send_package(
             CPROTO_REQ_QUERY,
             data=(query, time_precision),
