@@ -21,6 +21,7 @@ _MAP = (
     lambda data: data
 )
 
+
 def _packdata(tipe, data=None):
     assert tipe in protomap.MAP_REQ_DTYPE, \
         'No data type found for message type: {}'.format(tipe)
@@ -64,7 +65,8 @@ class _SiriDBProtocol(asyncio.Protocol):
         protomap.CPROTO_ERR_AUTH_UNKNOWN_DB: lambda f, d: f.set_exception(
             AuthenticationError('Unknown database')),
         protomap.CPROTO_ERR_LOADING_DB: lambda f, d: f.set_exception(
-            RuntimeError('Error loading database, '
+            RuntimeError(
+                'Error loading database, '
                 'please check the SiriDB log files')),
         protomap.CPROTO_ERR_FILE: lambda f, d: f.set_exception(
             RuntimeError('Error retreiving file')),
@@ -84,8 +86,6 @@ class _SiriDBProtocol(asyncio.Protocol):
         '''
         override asyncio.Protocol
         '''
-
-
         self._connected = True
         self.transport = transport
 
@@ -226,23 +226,3 @@ class _SiriDBProtocol(asyncio.Protocol):
                 .format(self._data_package.tipe))))(
                     future,
                     self._data_package.data)
-
-
-class _SiriDBInfoProtocol(_SiriDBProtocol):
-
-    def connection_made(self, transport):
-        '''
-        override _SiriDBProtocol
-        '''
-
-        self.transport = transport
-        self.remote_ip, self.port = transport.get_extra_info('peername')[:2]
-
-        logging.debug(
-            'Connection made (address: {} port: {})'
-            .format(self.remote_ip, self.port))
-
-        self.future = self.send_package(
-                protomap.CPROTO_REQ_INFO,
-                data=None,
-                timeout=10)
