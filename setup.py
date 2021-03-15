@@ -1,3 +1,11 @@
+"""
+Upload to PyPI
+
+python3 setup.py sdist
+twine upload --repository pypitest dist/siridb-connector-X.X.X.tar.gz
+twine upload --repository pypi dist/siridb-connector-X.X.X.tar.gz
+"""
+
 from distutils.core import setup
 import setuptools
 from siridb.connector import __version__
