@@ -1,3 +1,8 @@
+2021.03.15, Version 2.0.6 (BETA)
+
+    - Added `connected` property to client.
+    - Added time precision constants.
+
 2017.03.09, Version 2.0.5 (BETA)
 
     - Raise Authentication Errors on connect.
