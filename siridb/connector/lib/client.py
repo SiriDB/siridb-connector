@@ -164,6 +164,11 @@ class SiriDBClient:
         '''Can be used to check if close() has been called.'''
         return not self._retry_connect
 
+    @property
+    def connected(self):
+        '''Can be used to check the client has any active connections'''
+        return any(connection.connected for connection in self._connections)
+
     @staticmethod
     def _log_connect_result(result):
         for r in result:
