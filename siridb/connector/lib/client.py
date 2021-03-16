@@ -6,13 +6,13 @@ SiriDB Client for python => 3.5 using asyncio.
 '''
 import asyncio
 import functools
-import logging
 import random
 from .protocol import _SiriDBProtocol
 from .connection import SiriDBAsyncConnection
 from .exceptions import AuthenticationError
 from .exceptions import ServerError
 from .exceptions import PoolError
+from .logging import logger as logging
 
 
 class _SiriDBClientProtocol(_SiriDBProtocol):
