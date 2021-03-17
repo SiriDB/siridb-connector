@@ -1,6 +1,5 @@
 import asyncio
 import time
-import logging
 from .defaults import DEFAULT_CLIENT_PORT
 from .protocol import _SiriDBProtocol
 from .protomap import CPROTO_REQ_QUERY
@@ -12,6 +11,7 @@ from .constants import SECOND
 from .constants import MICROSECOND
 from .constants import MILLISECOND
 from .constants import NANOSECOND
+from .logging import logger as logging
 
 
 class SiriDBConnection():

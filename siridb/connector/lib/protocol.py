@@ -3,7 +3,6 @@
 :copyright: 2016, Jeroen van der Heijden (Transceptor Technology)
 '''
 import asyncio
-import logging
 import qpack
 from . import protomap
 from .datapackage import DataPackage
@@ -13,6 +12,7 @@ from .exceptions import ServerError
 from .exceptions import PoolError
 from .exceptions import AuthenticationError
 from .exceptions import UserAuthError
+from .logging import logger as logging
 
 
 _MAP = (
