@@ -1,14 +1,14 @@
 """
 Upload to PyPI
 
-python3 setup.py sdist
+python setup.py sdist
 twine upload --repository pypitest dist/siridb-connector-X.X.X.tar.gz
 twine upload --repository pypi dist/siridb-connector-X.X.X.tar.gz
 """
 
 from distutils.core import setup
 import setuptools
-from siridb.connector import __version__
+from siridb import __version__
 
 
 VERSION = __version__
@@ -31,9 +31,8 @@ setup(
     author='Jeroen van der Heijden',
     author_email='jeroen@transceptor.technology',
     url='https://github.com/SiriDB/siridb-connector',
-    download_url=
-        'https://github.com/SiriDB/'
-        'siridb-connector/tarball/{}'.format(VERSION),
+    download_url='https://github.com/SiriDB/'
+                 'siridb-connector/tarball/{}'.format(VERSION),
     keywords=['siridb', 'connector', 'database', 'client'],
     classifiers=[
         'Development Status :: 4 - Beta',

@@ -11,11 +11,6 @@ from .lib.constants import MICROSECOND
 from .lib.constants import MILLISECOND
 from .lib.constants import NANOSECOND
 
-
-__version_info__ = (2, 0, 7)
-__version__ = '.'.join(map(str, __version_info__))
-__maintainer__ = 'Jeroen van der Heijden'
-__email__ = 'jeroen@transceptor.technology'
 __all__ = [
     'async_connect',
     'async_server_info',
