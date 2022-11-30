@@ -1,6 +1,6 @@
 '''Protocol mapping (SiriDB version 2.0.x)
 
-:copyright: 2016, Jeroen van der Heijden (Transceptor Technology)
+:copyright: 2022, Jeroen van der Heijden (Cesbit.com)
 '''
 
 # data types

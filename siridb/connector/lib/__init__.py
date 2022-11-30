@@ -1,5 +1,5 @@
 '''SiriDB Connector - Communication with SiriDB
 
-:copyright: 2017, Jeroen van der Heijden (Transceptor Technology)
+:copyright: 2022, Jeroen van der Heijden (Cesbit.com)
 :license: MIT
 '''

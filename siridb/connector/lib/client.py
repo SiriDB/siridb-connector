@@ -2,7 +2,7 @@
 
 SiriDB Client for python => 3.5 using asyncio.
 
-:copyright: 2016, Jeroen van der Heijden (Transceptor Technology)
+:copyright: 2022, Jeroen van der Heijden (Cesbit.com)
 '''
 import asyncio
 import functools
@@ -192,6 +192,7 @@ class SiriDBClient:
                 connection.close()
 
     async def insert(self, data, timeout=300):
+        end = self._loop.time() + timeout
         while True:
             connection = self._get_random_connection()
 
@@ -202,6 +203,11 @@ class SiriDBClient:
                               'server if one is available...'.format(e))
                 if connection._protocol:
                     connection._protocol.set_not_available(self._loop)
+            except PoolError as e:
+                if self._loop.time() > end:
+                    raise
+                logging.debug(e)
+                await asyncio.sleep(2)
             else:
                 return result
 
@@ -212,6 +218,7 @@ class SiriDBClient:
         assert time_precision is None or isinstance(time_precision, int), \
             'time_precision should be None or an int type.'
 
+        end = self._loop.time() + timeout
         try_unavailable = True
         while True:
             connection = self._get_random_connection(try_unavailable)
@@ -224,6 +231,11 @@ class SiriDBClient:
                               'server if one is available...'.format(e))
                 if connection._protocol:
                     connection._protocol.set_not_available(self._loop)
+            except PoolError as e:
+                if self._loop.time() > end:
+                    raise
+                logging.debug(e)
+                await asyncio.sleep(2)
             else:
                 return result
 

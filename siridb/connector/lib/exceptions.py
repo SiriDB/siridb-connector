@@ -1,6 +1,6 @@
 '''Custom exceptions used by SiriDB.
 
-:copyright: 2016, Jeroen van der Heijden (Transceptor Technology)
+:copyright: 2022, Jeroen van der Heijden (Cesbit.com)
 '''
 
 

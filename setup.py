@@ -4,6 +4,8 @@ Upload to PyPI
 python setup.py sdist
 twine upload --repository pypitest dist/siridb-connector-X.X.X.tar.gz
 twine upload --repository pypi dist/siridb-connector-X.X.X.tar.gz
+
+locan installation: pip install -e .
 """
 
 from distutils.core import setup
@@ -29,7 +31,7 @@ setup(
     long_description=long_description,
     long_description_content_type='text/markdown',
     author='Jeroen van der Heijden',
-    author_email='jeroen@transceptor.technology',
+    author_email='jeroen@cesbit.com',
     url='https://github.com/SiriDB/siridb-connector',
     download_url='https://github.com/SiriDB/'
                  'siridb-connector/tarball/{}'.format(VERSION),

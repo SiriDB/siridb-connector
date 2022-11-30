@@ -2,7 +2,7 @@
 
 This class is used for unpacking a received data package.
 
-:copyright: 2016, Jeroen van der Heijden (Transceptor Technology)
+:copyright: 2022, Jeroen van der Heijden (Cesbit.com)
 '''
 
 import struct
