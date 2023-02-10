@@ -7,11 +7,17 @@ SiriDB Client for python => 3.5 using asyncio.
 import asyncio
 import functools
 import random
-from .protocol import _SiriDBProtocol
+from .protocol import _SiriDBProtocol, _SiriDBConnProtocol
 from .connection import SiriDBAsyncConnection
 from .exceptions import AuthenticationError
 from .exceptions import ServerError
 from .exceptions import PoolError
+from .constants import SECOND
+from .constants import MICROSECOND
+from .constants import MILLISECOND
+from .constants import NANOSECOND
+from .protomap import CPROTO_REQ_QUERY
+from .protomap import CPROTO_REQ_INSERT
 from .logging import logger as logging
 
 
@@ -173,7 +179,8 @@ class SiriDBClient:
     def _log_connect_result(result):
         for r in result:
             if r:
-                logging.error(r)
+                msg = str(r) or type(r).__name__
+                logging.error(msg)
 
     async def connect(self, timeout=None):
         self._retry_connect = True
@@ -206,7 +213,8 @@ class SiriDBClient:
             except PoolError as e:
                 if self._loop.time() > end:
                     raise
-                logging.debug(e)
+                msg = str(e) or type(e).__name__
+                logging.debug(msg)
                 await asyncio.sleep(2)
             else:
                 return result
@@ -234,7 +242,8 @@ class SiriDBClient:
             except PoolError as e:
                 if self._loop.time() > end:
                     raise
-                logging.debug(e)
+                msg = str(e) or type(e).__name__
+                logging.debug(msg)
                 await asyncio.sleep(2)
             else:
                 return result
@@ -315,3 +324,143 @@ class SiriDBClient:
                 return random.choice(connections)
 
         raise PoolError('No available connections found')
+
+
+class SiriDBConn:
+
+    MAX_RECONNECT_WAIT_TIME = 60
+    MAX_RECONNECT_TIMEOUT = 10
+    MAX_WRITE_RETRY = 600
+    RECONNECT_ATTEMPT = 3
+
+    def __init__(self,
+                 username,
+                 password,
+                 dbname,
+                 server,
+                 port=9000,
+                 loop=None):
+        self._username = username
+        self._password = password
+        self._dbname = dbname
+        self._server = server
+        self._port = port
+        self._loop = loop or asyncio.get_event_loop()
+        self._reconnecting = False
+        self._protocol = None
+
+    async def _connect(self, timeout):
+        client = self._loop.create_connection(
+            lambda: _SiriDBConnProtocol(
+                self._username,
+                self._password,
+                self._dbname),
+            host=self._server,
+            port=self._port)
+        _transport, self._protocol = \
+            await asyncio.wait_for(client, timeout=timeout)
+
+        try:
+            res = await asyncio.wait_for(
+                self._protocol.auth_future,
+                timeout=timeout)
+        except Exception as exc:
+            _transport.close()
+            raise exc
+
+    async def _reconnect_loop(self):
+        try:
+            wait_time = 1
+            timeout = 2
+            protocol = self._protocol
+            while True:
+                host, port = self._server, self._port
+                try:
+                    await self._connect(timeout=timeout)
+                except Exception as e:
+                    logging.error(
+                        f'Connecting to {host}:{port} failed: '
+                        f'{e}({e.__class__.__name__}), '
+                        f'Try next connect in {wait_time} seconds'
+                    )
+                else:
+                    if protocol and protocol._connected:
+                        # make sure the `old` connection will be dropped
+                        self._loop.call_later(10.0, protocol.transport.close)
+                    break
+
+                await asyncio.sleep(wait_time)
+                wait_time *= 2
+                wait_time = min(wait_time, self.MAX_RECONNECT_WAIT_TIME)
+                timeout = min(timeout+1, self.MAX_RECONNECT_TIMEOUT)
+        finally:
+            self._reconnecting = False
+
+    def _reconnect(self):
+        if self._reconnecting:
+            return asyncio.sleep(1)
+        self._reconnecting = True
+        return self._reconnect_loop()
+
+    def is_connected(self):
+        return self._protocol and self._protocol._connected
+
+    async def insert(self, data, timeout=300):
+        result = await self._ensure_write(
+            CPROTO_REQ_INSERT,
+            data=data,
+            timeout=timeout)
+        return result
+
+    def close(self):
+        if self.is_connected():
+            if not hasattr(self._protocol, 'close_future'):
+                self._protocol.close_future = self._loop.create_future()
+            self._protocol.transport.close()
+
+    async def wait_closed(self):
+        if self._protocol and hasattr(self._protocol, 'close_future'):
+            await self._protocol.close_future
+
+    async def query(self, query, time_precision=None, timeout=60):
+        assert isinstance(query, (str, bytes)), \
+            'query should be of type str, unicode or bytes'
+        assert time_precision in (
+            None,
+            SECOND,
+            MICROSECOND,
+            MILLISECOND,
+            NANOSECOND), 'time_precision must be either None, 0, 1, 2, 3'
+        result = await self._ensure_write(
+            CPROTO_REQ_QUERY,
+            data=(query, time_precision),
+            timeout=timeout)
+        return result
+
+    async def _ensure_write(
+            self,
+            tipe, data=None, is_binary=False, timeout=None):
+        retry = 0
+        while True:
+            retry += 1
+
+            if not self.is_connected():
+                if retry > self.MAX_WRITE_RETRY:
+                    raise ConnectionError("Failed to create a connection")
+                if retry == 1:
+                    logging.info('Wait for a connection')
+                await self._reconnect()  # ensure the re-connect loop
+                continue
+
+            try:
+                res = await self._protocol.send_package(
+                    tipe, data, is_binary, timeout)
+            except Exception as e:
+                if retry > self.MAX_WRITE_RETRY:
+                    raise e
+                if retry % self.RECONNECT_ATTEMPT == 0:
+                    self._reconnect()
+                await asyncio.sleep(1.0)
+                continue
+
+            return res
