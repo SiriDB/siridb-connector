@@ -18,6 +18,7 @@ from .constants import MILLISECOND
 from .constants import NANOSECOND
 from .protomap import CPROTO_REQ_QUERY
 from .protomap import CPROTO_REQ_INSERT
+from .protomap import CPROTO_REQ_PING
 from .logging import logger as logging
 
 
@@ -421,6 +422,10 @@ class SiriDBConn:
     async def wait_closed(self):
         if self._protocol and hasattr(self._protocol, 'close_future'):
             await self._protocol.close_future
+
+    async def connect(self, timeout=120):
+        result = await self._ensure_write(CPROTO_REQ_PING, timeout=timeout)
+        return result
 
     async def query(self, query, time_precision=None, timeout=60):
         assert isinstance(query, (str, bytes)), \
