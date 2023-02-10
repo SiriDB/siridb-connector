@@ -247,3 +247,11 @@ class _SiriDBInfoProtocol(_SiriDBProtocol):
                 protomap.CPROTO_REQ_INFO,
                 data=None,
                 timeout=10)
+
+
+class _SiriDBConnProtocol(_SiriDBProtocol):
+
+    def on_connection_lost(self, exc):
+        if hasattr(self, 'close_future'):
+            self.close_future.set_result(None)
+            delattr(self, 'close_future')
