@@ -210,7 +210,7 @@ class SiriDBClient:
                               'server if one is available...'.format(e))
                 if connection._protocol:
                     connection._protocol.set_not_available(self._loop)
-            except Exception as e:
+            except PoolError as e:
                 if self._loop.time() > end:
                     raise
                 msg = str(e) or type(e).__name__
@@ -239,7 +239,7 @@ class SiriDBClient:
                               'server if one is available...'.format(e))
                 if connection._protocol:
                     connection._protocol.set_not_available(self._loop)
-            except Exception as e:
+            except PoolError as e:
                 if self._loop.time() > end:
                     raise
                 msg = str(e) or type(e).__name__
