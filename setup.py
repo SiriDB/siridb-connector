@@ -1,4 +1,7 @@
 """
+Local testing:
+pip install -e .
+
 Upload to PyPI
 
 python setup.py sdist
