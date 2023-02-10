@@ -464,8 +464,9 @@ class SiriDBConn:
                 if retry > self.MAX_WRITE_RETRY:
                     raise e
                 if retry % self.RECONNECT_ATTEMPT == 0:
-                    self._reconnect()
-                await asyncio.sleep(1.0)
+                    await self._reconnect()
+                else:
+                    await asyncio.sleep(1.0)
                 continue
 
             return res
