@@ -7,8 +7,6 @@ Upload to PyPI
 python setup.py sdist
 twine upload --repository pypitest dist/siridb-connector-X.X.X.tar.gz
 twine upload --repository pypi dist/siridb-connector-X.X.X.tar.gz
-
-locan installation: pip install -e .
 """
 
 from distutils.core import setup
