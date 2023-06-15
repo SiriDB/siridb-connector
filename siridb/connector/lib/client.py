@@ -9,7 +9,6 @@ import functools
 import random
 from .protocol import _SiriDBProtocol, _SiriDBConnProtocol
 from .connection import SiriDBAsyncConnection
-from .exceptions import AuthenticationError
 from .exceptions import ServerError
 from .exceptions import PoolError
 from .constants import SECOND
@@ -331,7 +330,7 @@ class SiriDBConn:
 
     MAX_RECONNECT_WAIT_TIME = 60
     MAX_RECONNECT_TIMEOUT = 10
-    MAX_WRITE_RETRY = 600
+    MAX_WRITE_RETRY = 120
     RECONNECT_ATTEMPT = 3
 
     def __init__(self,
@@ -460,7 +459,10 @@ class SiriDBConn:
             try:
                 res = await self._protocol.send_package(
                     tipe, data, is_binary, timeout)
-            except Exception as e:
+            except (ServerError,
+                    PoolError,
+                    OSError,
+                    asyncio.TimeoutError) as e:
                 if retry > self.MAX_WRITE_RETRY:
                     raise e
                 if retry % self.RECONNECT_ATTEMPT == 0:
