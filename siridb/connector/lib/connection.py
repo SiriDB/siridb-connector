@@ -25,7 +25,8 @@ class SiriDBConnection():
                  loop=None,
                  timeout=10,
                  protocol=_SiriDBProtocol):
-        self._loop = loop or asyncio.get_running_loop()
+        """WARNING: Creates a new asyncio event loop if none is given."""
+        self._loop = loop or asyncio.new_event_loop()
         client = self._loop.create_connection(
             lambda: protocol(username, password, dbname),
             host=host,

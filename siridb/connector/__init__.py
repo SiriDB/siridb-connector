@@ -1,11 +1,9 @@
-import os
-import sys
 import asyncio
 from .lib.protocol import _SiriDBProtocol
 from .lib.protocol import _SiriDBInfoProtocol
 from .lib.connection import SiriDBConnection
 from .lib.defaults import DEFAULT_CLIENT_PORT
-from .lib.client import SiriDBClient, SiriDBConn
+from .lib.client import SiriDBClient, SiriDBAsyncConnection
 from .lib.constants import SECOND
 from .lib.constants import MICROSECOND
 from .lib.constants import MILLISECOND
@@ -44,7 +42,7 @@ def connect(username,
             loop=None,
             timeout=10,
             protocol=SiriDBProtocol):
-
+    """WARNING: Creates a new asyncio event loop if none is given."""
     return SiriDBConnection(
         username,
         password,
