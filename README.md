@@ -72,8 +72,7 @@ siri = SiriDBClient(
     hostlist=[('localhost', 9000)],  # Multiple connections are supported
     keepalive=True)
 
-loop = asyncio.get_event_loop()
-loop.run_until_complete(example(siri))
+asyncio.run(example(siri))
 ```
 
 

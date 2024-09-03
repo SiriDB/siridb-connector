@@ -25,7 +25,7 @@ class SiriDBConnection():
                  loop=None,
                  timeout=10,
                  protocol=_SiriDBProtocol):
-        self._loop = loop or asyncio.get_event_loop()
+        self._loop = loop or asyncio.get_running_loop()
         client = self._loop.create_connection(
             lambda: protocol(username, password, dbname),
             host=host,
@@ -125,7 +125,7 @@ class SiriDBAsyncConnection():
                       timeout=10,
                       keepalive=False,
                       protocol=_SiriDBProtocol):
-        loop = loop or asyncio.get_event_loop()
+        loop = loop or asyncio.get_running_loop()
         client = loop.create_connection(
             lambda: protocol(username, password, dbname),
             host=host,

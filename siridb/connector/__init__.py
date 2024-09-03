@@ -85,7 +85,7 @@ async def async_server_info(host='127.0.0.1',
                             port=DEFAULT_CLIENT_PORT,
                             loop=None,
                             timeout=10):
-    loop = loop or asyncio.get_event_loop()
+    loop = loop or asyncio.get_running_loop()
     client = loop.create_connection(
         lambda: _SiriDBInfoProtocol(None, None, None),
         host=host,

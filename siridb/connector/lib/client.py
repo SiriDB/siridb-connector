@@ -156,7 +156,7 @@ class SiriDBClient:
             for _ in range(client.weight):
                 self._connection_pool.append(client)
         self._connections = set(self._connection_pool)
-        self._loop = loop or asyncio.get_event_loop()
+        self._loop = loop or asyncio.get_running_loop()
         self._timeout = timeout
         self._connect_task = None
         self._max_wait_retry = max_wait_retry
@@ -345,7 +345,7 @@ class SiriDBConn:
         self._dbname = dbname
         self._server = server
         self._port = port
-        self._loop = loop or asyncio.get_event_loop()
+        self._loop = loop or asyncio.get_running_loop()
         self._reconnecting = False
         self._protocol = None
 
