@@ -361,7 +361,7 @@ class SiriDBConn:
             await asyncio.wait_for(client, timeout=timeout)
 
         try:
-            res = await asyncio.wait_for(
+            _res = await asyncio.wait_for(
                 self._protocol.auth_future,
                 timeout=timeout)
         except Exception as exc:

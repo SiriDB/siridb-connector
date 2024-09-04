@@ -37,7 +37,7 @@ class SiriDBConnection():
 
     async def _wait_for_auth(self):
         try:
-            res = await self._protocol.auth_future
+            _res = await self._protocol.auth_future
         except Exception as exc:
             logging.debug('Authentication failed: {}'.format(exc))
             self._transport.close()
@@ -136,7 +136,7 @@ class SiriDBAsyncConnection():
             await asyncio.wait_for(client, timeout=timeout)
 
         try:
-            res = await self._protocol.auth_future
+            _res = await self._protocol.auth_future
         except Exception as exc:
             logging.debug('Authentication failed: {}'.format(exc))
             _transport.close()
