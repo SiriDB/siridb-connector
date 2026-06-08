@@ -11,3 +11,4 @@ build/
 dist/
 siridb_connector.egg-info/
 sample.py
+.vscode/

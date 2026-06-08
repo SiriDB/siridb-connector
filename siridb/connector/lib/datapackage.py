@@ -17,9 +17,9 @@ class DataPackage(object):
     struct_datapackage = struct.Struct('<IHBB')
 
     _MAP = (
-        lambda data: None,
-        lambda data: qpack.unpackb(data, decode='utf-8'),
-        lambda data: data,
+        lambda data, _: None,
+        lambda data, decode: qpack.unpackb(data, decode=decode),
+        lambda data, _: data,
     )
 
     def __init__(self, barray):
@@ -28,9 +28,10 @@ class DataPackage(object):
         self.length += self.__class__.struct_datapackage.size
         self.data = None
 
-    def extract_data_from(self, barray):
+    def extract_data_from(self, barray, decode='utf-8'):
         try:
             self.data = self.__class__._MAP[protomap.MAP_RES_DTYPE[self.tipe]](
-                barray[self.__class__.struct_datapackage.size:self.length])
+                barray[self.__class__.struct_datapackage.size:self.length],
+                decode)
         finally:
             del barray[:self.length]

@@ -42,7 +42,8 @@ def connect(username,
             port=DEFAULT_CLIENT_PORT,
             loop=None,
             timeout=10,
-            protocol=SiriDBProtocol):
+            protocol=SiriDBProtocol,
+            decode='utf-8'):
     """WARNING: Creates a new asyncio event loop if none is given."""
     return SiriDBConnection(
         username,
@@ -52,7 +53,8 @@ def connect(username,
         port=port,
         loop=loop,
         timeout=timeout,
-        protocol=protocol)
+        protocol=protocol,
+        decode=decode)
 
 
 async def async_connect(username,
@@ -63,7 +65,8 @@ async def async_connect(username,
                         loop=None,
                         timeout=10,
                         keepalive=False,
-                        protocol=SiriDBProtocol):
+                        protocol=SiriDBProtocol,
+                        decode='utf-8'):
 
     connection = SiriDBAsyncConnection()
     await connection.connect(
@@ -75,7 +78,8 @@ async def async_connect(username,
         loop=loop,
         timeout=timeout,
         keepalive=keepalive,
-        protocol=protocol)
+        protocol=protocol,
+        decode=decode)
 
     return connection
 

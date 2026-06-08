@@ -339,7 +339,8 @@ class SiriDBConn:
                  dbname,
                  server,
                  port=9000,
-                 loop=None):
+                 loop=None,
+                 decode='utf-8'):
         self._username = username
         self._password = password
         self._dbname = dbname
@@ -348,13 +349,15 @@ class SiriDBConn:
         self._loop = loop or asyncio.get_running_loop()
         self._reconnecting = False
         self._protocol = None
+        self._decode = decode
 
     async def _connect(self, timeout):
         client = self._loop.create_connection(
             lambda: _SiriDBConnProtocol(
                 self._username,
                 self._password,
-                self._dbname),
+                self._dbname,
+                decode=self._decode),
             host=self._server,
             port=self._port)
         _transport, self._protocol = \

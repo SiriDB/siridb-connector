@@ -72,7 +72,7 @@ class _SiriDBProtocol(asyncio.Protocol):
             RuntimeError('Error retreiving file')),
     }
 
-    def __init__(self, username, password, dbname):
+    def __init__(self, username, password, dbname, decode='utf-8'):
         self._buffered_data = bytearray()
         self._data_package = None
         self._pid = 0
@@ -80,6 +80,7 @@ class _SiriDBProtocol(asyncio.Protocol):
         self._username = username
         self._password = password
         self._dbname = dbname
+        self._decode = decode
         self.auth_future = None
 
     def connection_made(self, transport):
@@ -139,7 +140,9 @@ class _SiriDBProtocol(asyncio.Protocol):
             if size < self._data_package.length:
                 return None
             try:
-                self._data_package.extract_data_from(self._buffered_data)
+                self._data_package.extract_data_from(
+                    self._buffered_data,
+                    self._decode)
             except KeyError as e:
                 logging.error('Unsupported package received: {}'.format(e))
             except Exception as e:

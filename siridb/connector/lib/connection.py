@@ -24,11 +24,12 @@ class SiriDBConnection():
                  port=DEFAULT_CLIENT_PORT,
                  loop=None,
                  timeout=10,
-                 protocol=_SiriDBProtocol):
+                 protocol=_SiriDBProtocol,
+                 decode='utf-8'):
         """WARNING: Creates a new asyncio event loop if none is given."""
         self._loop = loop or asyncio.new_event_loop()
         client = self._loop.create_connection(
-            lambda: protocol(username, password, dbname),
+            lambda: protocol(username, password, dbname, decode),
             host=host,
             port=port)
         self._transport, self._protocol = self._loop.run_until_complete(
@@ -125,10 +126,11 @@ class SiriDBAsyncConnection():
                       loop=None,
                       timeout=10,
                       keepalive=False,
-                      protocol=_SiriDBProtocol):
+                      protocol=_SiriDBProtocol,
+                      decode='utf-8'):
         loop = loop or asyncio.get_running_loop()
         client = loop.create_connection(
-            lambda: protocol(username, password, dbname),
+            lambda: protocol(username, password, dbname, decode),
             host=host,
             port=port)
         self._timeout = timeout
